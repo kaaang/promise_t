@@ -1,0 +1,19 @@
+version: '3.1'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:15
+    restart: always
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: promise_t
+
+volumes:
+  postgres-data:
+    driver: local
