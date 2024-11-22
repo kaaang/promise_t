@@ -1,5 +1,6 @@
 package kr.co.promise_t.api.user.application.command;
 
+import java.util.UUID;
 import kr.co.promise_t.api.kernel.Command;
 import kr.co.promise_t.api.user.application.command.model.CreateUserCommandModel;
 import kr.co.promise_t.core.user.UserData;
@@ -10,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 public class CreateUserCommand implements Command<CreateUserCommandModel> {
@@ -20,15 +19,16 @@ public class CreateUserCommand implements Command<CreateUserCommandModel> {
     @Override
     @Transactional
     public void execute(CreateUserCommandModel model) {
-        var user = new UserFactory(
-                UserData.builder()
-                        .id(UserId.of(UUID.randomUUID()))
-                        .email(model.getEmail())
-                        .username(model.getUsername())
-                        .password(model.getPassword())
-                        .roleType(model.getRoleType())
-                        .build()
-        ).create();
+        var user =
+                new UserFactory(
+                                UserData.builder()
+                                        .id(UserId.of(UUID.randomUUID()))
+                                        .email(model.getEmail())
+                                        .username(model.getUsername())
+                                        .password(model.getPassword())
+                                        .roleType(model.getRoleType())
+                                        .build())
+                        .create();
 
         userRepository.save(user);
     }

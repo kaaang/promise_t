@@ -14,23 +14,16 @@ import lombok.*;
 @Entity
 @Table(name = "users")
 public class User extends BaseEntityAggregateRoot<User> {
-    //TODO : UserDetails 추가해야함
+    // TODO : UserDetails 추가해야함
 
-    @EmbeddedId
-    private UserId id;
+    @EmbeddedId private UserId id;
 
-    @Column
-    @NotNull
-    private String email;
+    @Column @NotNull private String email;
 
-    @Column
-    @NotNull
-    private String username;
+    @Column @NotNull private String username;
 
-    //TODO : 암호화 필요
-    @Column
-    @NotNull
-    private String password;
+    // TODO : 암호화 필요
+    @Column @NotNull private String password;
 
     @Column
     @NotNull

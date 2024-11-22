@@ -3,10 +3,9 @@ package kr.co.promise_t.core.user;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.GeneratedValue;
-import lombok.*;
-
 import java.io.Serializable;
 import java.util.UUID;
+import lombok.*;
 
 @Getter
 @Embeddable
@@ -19,7 +18,7 @@ public class UserId implements Serializable {
     @Column(name = "id")
     private UUID value;
 
-    public static UserId of(UUID value){
+    public static UserId of(UUID value) {
         return new UserId(value);
     }
 }

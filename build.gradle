@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.4'
     id 'io.spring.dependency-management' version '1.1.6'
+    id 'com.diffplug.spotless' version '6.21.0'
 }
 
 group = 'kr.co'
@@ -40,6 +41,19 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //    testImplementation 'org.springframework.kafka:spring-kafka-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+spotless {
+    java {
+        googleJavaFormat('1.10.0')
+        target 'src/**/*.java'
+
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        indentWithTabs(2)
+        indentWithSpaces(4)
+        endWithNewline()
+    }
 }
 
 tasks.named('test') {

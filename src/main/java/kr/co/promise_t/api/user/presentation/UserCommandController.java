@@ -21,15 +21,16 @@ public class UserCommandController {
     private final CreateUserCommand createUserCommand;
 
     @PostMapping
-    public ResponseEntity<Object> createUser(@Valid @RequestBody UserCreateRequest request){
-        new CommandExecutor<>(createUserCommand,
-                CreateUserCommandModel.builder()
-                        .email(request.getEmail())
-                        .username(request.getUsername())
-                        .password(request.getPassword())
-                        .roleType(request.getRoleType())
-                        .build()
-                ).invoke();
+    public ResponseEntity<Object> createUser(@Valid @RequestBody UserCreateRequest request) {
+        new CommandExecutor<>(
+                        createUserCommand,
+                        CreateUserCommandModel.builder()
+                                .email(request.getEmail())
+                                .username(request.getUsername())
+                                .password(request.getPassword())
+                                .roleType(request.getRoleType())
+                                .build())
+                .invoke();
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
