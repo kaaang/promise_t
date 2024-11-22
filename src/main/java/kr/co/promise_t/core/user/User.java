@@ -1,8 +1,9 @@
 package kr.co.promise_t.core.user;
 
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import kr.co.promise_t.core.kernel.domain.BaseEntityAggregateRoot;
+import kr.co.promise_t.core.user.vo.UserRoleType;
 import lombok.*;
 
 @EqualsAndHashCode(of = "id", callSuper = false)
@@ -12,7 +13,27 @@ import lombok.*;
 @Getter
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends BaseEntityAggregateRoot<User> {
+    //TODO : UserDetails 추가해야함
+
     @EmbeddedId
     private UserId id;
+
+    @Column
+    @NotNull
+    private String email;
+
+    @Column
+    @NotNull
+    private String username;
+
+    //TODO : 암호화 필요
+    @Column
+    @NotNull
+    private String password;
+
+    @Column
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private UserRoleType roleType;
 }
