@@ -9,5 +9,4 @@ public class PromiseTApplication {
     public static void main(String[] args) {
         SpringApplication.run(PromiseTApplication.class, args);
     }
-
 }
