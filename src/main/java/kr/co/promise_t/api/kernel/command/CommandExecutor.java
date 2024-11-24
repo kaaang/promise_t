@@ -1,4 +1,4 @@
-package kr.co.promise_t.api.kernel;
+package kr.co.promise_t.api.kernel.command;
 
 public class CommandExecutor<T extends CommandModel> {
     private final Command<T> command;
