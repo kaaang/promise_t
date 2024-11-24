@@ -1,7 +1,7 @@
 package kr.co.promise_t.api.user.presentation;
 
 import jakarta.validation.Valid;
-import kr.co.promise_t.api.kernel.CommandExecutor;
+import kr.co.promise_t.api.kernel.command.CommandExecutor;
 import kr.co.promise_t.api.user.application.command.CreateUserCommand;
 import kr.co.promise_t.api.user.application.command.model.CreateUserCommandModel;
 import kr.co.promise_t.api.user.presentation.request.UserCreateRequest;

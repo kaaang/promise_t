@@ -1,7 +1,7 @@
 package kr.co.promise_t.api.user.application.command;
 
 import java.util.UUID;
-import kr.co.promise_t.api.kernel.Command;
+import kr.co.promise_t.api.kernel.command.Command;
 import kr.co.promise_t.api.user.application.command.model.CreateUserCommandModel;
 import kr.co.promise_t.core.user.UserData;
 import kr.co.promise_t.core.user.UserFactory;
