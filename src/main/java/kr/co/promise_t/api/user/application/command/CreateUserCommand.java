@@ -3,6 +3,7 @@ package kr.co.promise_t.api.user.application.command;
 import java.util.UUID;
 import kr.co.promise_t.api.kernel.command.Command;
 import kr.co.promise_t.api.user.application.command.model.CreateUserCommandModel;
+import kr.co.promise_t.api.user.application.exception.UserAlreadyExistsException;
 import kr.co.promise_t.core.user.UserData;
 import kr.co.promise_t.core.user.UserFactory;
 import kr.co.promise_t.core.user.UserId;
@@ -19,6 +20,8 @@ public class CreateUserCommand implements Command<CreateUserCommandModel> {
     @Override
     @Transactional
     public void execute(CreateUserCommandModel model) {
+        this.checkIfExists(model.getEmail());
+
         var user =
                 new UserFactory(
                                 UserData.builder()
@@ -31,5 +34,11 @@ public class CreateUserCommand implements Command<CreateUserCommandModel> {
                         .create();
 
         userRepository.save(user);
+    }
+
+    private void checkIfExists(String email) {
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new UserAlreadyExistsException("이미 가입된 이메일 입니다.");
+        }
     }
 }

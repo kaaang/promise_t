@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import kr.co.promise_t.core.kernel.domain.BaseEntityAggregateRoot;
 import kr.co.promise_t.core.user.vo.UserRoleType;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 @EqualsAndHashCode(of = "id", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -13,6 +14,7 @@ import lombok.*;
 @Getter
 @Entity
 @Table(name = "users")
+@Where(clause = "deleted_at is null")
 public class User extends BaseEntityAggregateRoot<User> {
     // TODO : UserDetails 추가해야함
 

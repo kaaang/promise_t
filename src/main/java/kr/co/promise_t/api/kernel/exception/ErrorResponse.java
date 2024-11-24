@@ -15,10 +15,18 @@ public class ErrorResponse {
     private String path;
     private LocalDateTime timestamp;
 
-    public ErrorResponse(HttpStatus status, String errors, String path, LocalDateTime timestamp) {
+    public ErrorResponse(HttpStatus status, LocalDateTime timestamp, String path, String error) {
         this.status = status.value();
-        this.errors = Collections.singletonList(errors);
         this.timestamp = timestamp;
         this.path = path;
+        this.errors = Collections.singletonList(error);
+    }
+
+    public ErrorResponse(
+            HttpStatus status, LocalDateTime timestamp, String path, List<String> errors) {
+        this.status = status.value();
+        this.timestamp = timestamp;
+        this.path = path;
+        this.errors = errors;
     }
 }
