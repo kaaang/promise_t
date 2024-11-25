@@ -22,7 +22,7 @@ public class UserCreateRequest {
     private String password;
 
     @NotBlank(message = "이름은 필수 입니다.")
-    private String username;
+    private String name;
 
     @NotBlank(message = "비밀번호 확인은 빈 값일 수 없습니다.")
     private String passwordConfirm;

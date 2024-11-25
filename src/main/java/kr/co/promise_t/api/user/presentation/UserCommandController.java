@@ -26,7 +26,7 @@ public class UserCommandController {
                         createUserCommand,
                         CreateUserCommandModel.builder()
                                 .email(request.getEmail())
-                                .username(request.getUsername())
+                                .name(request.getName())
                                 .password(request.getPassword())
                                 .roleType(request.getRoleType())
                                 .build())

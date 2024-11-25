@@ -15,14 +15,14 @@ import org.hibernate.annotations.Where;
 @Entity
 @Table(name = "users")
 @Where(clause = "deleted_at is null")
-public class User extends BaseEntityAggregateRoot<User> {
+public class User extends BaseEntityAggregateRoot<User>{
     // TODO : UserDetails 추가해야함
 
     @EmbeddedId private UserId id;
 
     @Column @NotNull private String email;
 
-    @Column @NotNull private String username;
+    @Column @NotNull private String name;
 
     // TODO : 암호화 필요
     @Column @NotNull private String password;

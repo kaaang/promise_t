@@ -27,7 +27,7 @@ class UserCreateRequestTest extends ValidatorUnitTestConfig {
         return UserCreateRequest.builder()
                 .email("test@gmail.com")
                 .password("test")
-                .username("test")
+                .name("test")
                 .passwordConfirm("test")
                 .roleType(UserRoleType.STUDENT);
     }

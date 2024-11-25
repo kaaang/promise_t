@@ -1,6 +1,5 @@
 package kr.co.promise_t.api.user.presentation;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -31,7 +30,7 @@ class UserCommandControllerTest extends TestBaseConfig {
                             .email("test@gmail.com")
                             .password("test")
                             .passwordConfirm("test")
-                            .username("test")
+                            .name("test")
                             .roleType(UserRoleType.STUDENT)
                             .build();
 
@@ -46,7 +45,7 @@ class UserCommandControllerTest extends TestBaseConfig {
                                             .id(UserId.of(UUID.randomUUID()))
                                             .email("test@gmail.com")
                                             .password("test")
-                                            .username("test")
+                                            .name("test")
                                             .roleType(UserRoleType.STUDENT)
                                             .build())
                             .create());
@@ -56,7 +55,7 @@ class UserCommandControllerTest extends TestBaseConfig {
                             .email("test@gmail.com")
                             .password("test")
                             .passwordConfirm("test")
-                            .username("test")
+                            .name("test")
                             .roleType(UserRoleType.STUDENT)
                             .build();
 

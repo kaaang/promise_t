@@ -27,7 +27,7 @@ public class CreateUserCommand implements Command<CreateUserCommandModel> {
                                 UserData.builder()
                                         .id(UserId.of(UUID.randomUUID()))
                                         .email(model.getEmail())
-                                        .username(model.getUsername())
+                                        .name(model.getName())
                                         .password(model.getPassword())
                                         .roleType(model.getRoleType())
                                         .build())

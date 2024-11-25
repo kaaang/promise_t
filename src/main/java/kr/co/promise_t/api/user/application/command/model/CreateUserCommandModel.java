@@ -9,7 +9,7 @@ import lombok.Getter;
 @Builder
 public class CreateUserCommandModel implements CommandModel {
     private String email;
-    private String username;
+    private String name;
     private String password;
     private UserRoleType roleType;
 }
