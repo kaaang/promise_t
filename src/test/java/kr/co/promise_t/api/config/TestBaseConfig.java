@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 @ExtendWith(SpringExtension.class)
 @Import({
     TestPostgresContainerConfig.class,
-    TestRedisContainerConfig.class,
     TestRedisConfig.class,
 })
 @ActiveProfiles(value = "test")
