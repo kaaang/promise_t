@@ -9,11 +9,8 @@ spring:
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     database: postgresql
-#    properties:
-#      hibernate.format_sql: true
 
   datasource:
-#    url: jdbc:tc:postgresql://localhost:5433/test
     url: jdbc:tc:postgresql:///test
     username: test
     password: test
@@ -23,8 +20,12 @@ spring:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.yaml
 
-#logging:
-#  level:
-#    org.hibernate.SQL: DEBUG
-#    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  data:
+    redis:
+      host: localhost
+      port: 6380
+
+jwt:
+  secret: "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest"
+
 

@@ -12,7 +12,7 @@ public class UserFactory implements AbstractDomainFactory<User> {
         return User.builder()
                 .id(data.getId())
                 .email(data.getEmail())
-                .username(data.getUsername())
+                .name(data.getName())
                 .password(data.getPassword())
                 .roleType(data.getRoleType())
                 .build();

@@ -7,7 +7,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
 @ActiveProfiles("test")
-public class TestPostgresConfig {
+public class TestPostgresContainerConfig {
     @Container
     private static final PostgreSQLContainer postgreSQLContainer =
             new PostgreSQLContainer("postgres:15")

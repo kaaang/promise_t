@@ -1,32 +1,22 @@
 package kr.co.promise_t.api.kernel.exception;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
+@Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponse {
-    private int status;
-    private List<String> errors;
+    @Builder.Default private HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+    @Builder.Default private List<String> errors = new ArrayList<>();
+    @Builder.Default private String message = "Unknown";
+    @Builder.Default private LocalDateTime timestamp = LocalDateTime.now();
     private String path;
-    private LocalDateTime timestamp;
-
-    public ErrorResponse(HttpStatus status, LocalDateTime timestamp, String path, String error) {
-        this.status = status.value();
-        this.timestamp = timestamp;
-        this.path = path;
-        this.errors = Collections.singletonList(error);
-    }
-
-    public ErrorResponse(
-            HttpStatus status, LocalDateTime timestamp, String path, List<String> errors) {
-        this.status = status.value();
-        this.timestamp = timestamp;
-        this.path = path;
-        this.errors = errors;
-    }
 }

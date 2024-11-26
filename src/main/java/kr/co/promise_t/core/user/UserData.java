@@ -9,7 +9,7 @@ import lombok.Getter;
 public class UserData {
     private UserId id;
     private String email;
-    private String username;
+    private String name;
     private String password;
     private UserRoleType roleType;
 }

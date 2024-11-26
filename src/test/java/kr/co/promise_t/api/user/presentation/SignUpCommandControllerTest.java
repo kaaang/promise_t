@@ -1,6 +1,5 @@
 package kr.co.promise_t.api.user.presentation;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -19,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-class UserCommandControllerTest extends TestBaseConfig {
+class SignUpCommandControllerTest extends TestBaseConfig {
     @Autowired private UserRepository userRepository;
 
     @Nested
@@ -31,7 +30,7 @@ class UserCommandControllerTest extends TestBaseConfig {
                             .email("test@gmail.com")
                             .password("test")
                             .passwordConfirm("test")
-                            .username("test")
+                            .name("test")
                             .roleType(UserRoleType.STUDENT)
                             .build();
 
@@ -46,7 +45,7 @@ class UserCommandControllerTest extends TestBaseConfig {
                                             .id(UserId.of(UUID.randomUUID()))
                                             .email("test@gmail.com")
                                             .password("test")
-                                            .username("test")
+                                            .name("test")
                                             .roleType(UserRoleType.STUDENT)
                                             .build())
                             .create());
@@ -56,7 +55,7 @@ class UserCommandControllerTest extends TestBaseConfig {
                             .email("test@gmail.com")
                             .password("test")
                             .passwordConfirm("test")
-                            .username("test")
+                            .name("test")
                             .roleType(UserRoleType.STUDENT)
                             .build();
 
@@ -66,7 +65,7 @@ class UserCommandControllerTest extends TestBaseConfig {
         private ResultActions getResultActionsBy(UserCreateRequest request) throws Exception {
             return mockMvc
                     .perform(
-                            post("/users")
+                            post("/users/signup")
                                     .contentType(MediaType.APPLICATION_JSON)
                                     .content(objectMapper.writeValueAsString(request)))
                     .andDo(print());

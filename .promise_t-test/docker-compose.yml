@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   postgres:
-    container_name: postgres
+    container_name: promise-t-postgres
     image: postgres:15
     restart: always
     volumes:
@@ -13,6 +13,12 @@ services:
       POSTGRES_USER: test
       POSTGRES_PASSWORD: test
       POSTGRES_DB: promise_t
+
+  redis:
+    container_name: promise-t-redis
+    image: redis:6
+    ports:
+      - "6379:6379"
 
 volumes:
   postgres-data:

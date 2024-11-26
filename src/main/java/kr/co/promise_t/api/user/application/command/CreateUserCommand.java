@@ -9,6 +9,7 @@ import kr.co.promise_t.core.user.UserFactory;
 import kr.co.promise_t.core.user.UserId;
 import kr.co.promise_t.core.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CreateUserCommand implements Command<CreateUserCommandModel> {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -27,8 +29,8 @@ public class CreateUserCommand implements Command<CreateUserCommandModel> {
                                 UserData.builder()
                                         .id(UserId.of(UUID.randomUUID()))
                                         .email(model.getEmail())
-                                        .username(model.getUsername())
-                                        .password(model.getPassword())
+                                        .name(model.getName())
+                                        .password(passwordEncoder.encode(model.getPassword()))
                                         .roleType(model.getRoleType())
                                         .build())
                         .create();

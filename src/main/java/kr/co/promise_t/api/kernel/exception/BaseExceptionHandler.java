@@ -9,8 +9,8 @@ import org.springframework.web.context.request.WebRequest;
 
 @RestControllerAdvice
 public interface BaseExceptionHandler {
-    default ResponseEntity<Object> errorResponseToResponseEntity(ErrorResponse error) {
-        return ResponseEntity.status(error.getStatus()).body(error);
+    default ResponseEntity<Object> toResponseEntity(ErrorResponse response) {
+        return ResponseEntity.status(response.getStatus()).body(response);
     }
 
     ResponseEntity<Object> handleBindException(

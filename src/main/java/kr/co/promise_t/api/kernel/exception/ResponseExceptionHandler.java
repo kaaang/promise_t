@@ -1,6 +1,5 @@
 package kr.co.promise_t.api.kernel.exception;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.http.HttpHeaders;
@@ -22,26 +21,26 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler
     @ExceptionHandler({NotFoundException.class})
     public ResponseEntity<Object> notFoundException(NotFoundException e, ServletWebRequest request) {
         var errorResponse =
-                new ErrorResponse(
-                        HttpStatus.NOT_FOUND,
-                        LocalDateTime.now(),
-                        request.getRequest().getRequestURI(),
-                        e.getMessage());
+                ErrorResponse.builder()
+                        .status(HttpStatus.NOT_FOUND)
+                        .errors(List.of(e.getMessage()))
+                        .path(request.getRequest().getRequestURI())
+                        .build();
 
-        return this.errorResponseToResponseEntity(errorResponse);
+        return this.toResponseEntity(errorResponse);
     }
 
     @ExceptionHandler({BadRequestException.class})
     public ResponseEntity<Object> badRequestException(
             BadRequestException e, ServletWebRequest request) {
         var errorResponse =
-                new ErrorResponse(
-                        HttpStatus.BAD_REQUEST,
-                        LocalDateTime.now(),
-                        request.getRequest().getRequestURI(),
-                        e.getMessage());
+                ErrorResponse.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errors(List.of(e.getMessage()))
+                        .path(request.getRequest().getRequestURI())
+                        .build();
 
-        return this.errorResponseToResponseEntity(errorResponse);
+        return this.toResponseEntity(errorResponse);
     }
 
     @Override
@@ -66,11 +65,11 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler
         }
 
         var errorResponse =
-                new ErrorResponse(
-                        status,
-                        LocalDateTime.now(),
-                        ((ServletWebRequest) request).getRequest().getRequestURI(),
-                        errors);
+                ErrorResponse.builder()
+                        .status(status)
+                        .path(((ServletWebRequest) request).getRequest().getRequestURI())
+                        .errors(errors)
+                        .build();
 
         return handleExceptionInternal(ex, errorResponse, headers, status, request);
     }
