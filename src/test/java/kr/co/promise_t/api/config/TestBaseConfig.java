@@ -17,7 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc(printOnlyOnFailure = false)
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-@Import({TestPostgresConfig.class})
+@Import({
+    TestPostgresContainerConfig.class,
+    TestRedisContainerConfig.class,
+    TestRedisConfig.class,
+})
 @ActiveProfiles(value = "test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Transactional

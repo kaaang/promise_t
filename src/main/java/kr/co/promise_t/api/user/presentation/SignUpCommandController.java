@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "users", produces = MediaType.APPLICATION_JSON_VALUE)
-public class UserCommandController {
+@RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
+public class SignUpCommandController {
     private final CreateUserCommand createUserCommand;
 
-    @PostMapping
+    @PostMapping(value = "/signup")
     public ResponseEntity<Object> createUser(@Valid @RequestBody UserCreateRequest request) {
         new CommandExecutor<>(
                         createUserCommand,
