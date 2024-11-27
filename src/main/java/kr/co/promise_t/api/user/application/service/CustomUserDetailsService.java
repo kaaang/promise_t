@@ -1,8 +1,8 @@
 package kr.co.promise_t.api.user.application.service;
 
 import java.util.UUID;
-import kr.co.promise_t.core.user.UserId;
 import kr.co.promise_t.core.user.UserRepository;
+import kr.co.promise_t.core.user.vo.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

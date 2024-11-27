@@ -9,8 +9,8 @@ import kr.co.promise_t.api.config.TestBaseConfig;
 import kr.co.promise_t.api.user.presentation.request.UserCreateRequest;
 import kr.co.promise_t.core.user.UserData;
 import kr.co.promise_t.core.user.UserFactory;
-import kr.co.promise_t.core.user.UserId;
 import kr.co.promise_t.core.user.UserRepository;
+import kr.co.promise_t.core.user.vo.UserId;
 import kr.co.promise_t.core.user.vo.UserRoleType;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ class SignUpCommandControllerTest extends TestBaseConfig {
                             .password("test")
                             .passwordConfirm("test")
                             .name("test")
-                            .roleType(UserRoleType.STUDENT)
+                            .roleType(UserRoleType.ROLE_STUDENT)
                             .build();
 
             this.getResultActionsBy(request).andExpect(status().isCreated());
@@ -46,7 +46,7 @@ class SignUpCommandControllerTest extends TestBaseConfig {
                                             .email("test@gmail.com")
                                             .password("test")
                                             .name("test")
-                                            .roleType(UserRoleType.STUDENT)
+                                            .roleType(UserRoleType.ROLE_STUDENT)
                                             .build())
                             .create());
 
@@ -56,7 +56,7 @@ class SignUpCommandControllerTest extends TestBaseConfig {
                             .password("test")
                             .passwordConfirm("test")
                             .name("test")
-                            .roleType(UserRoleType.STUDENT)
+                            .roleType(UserRoleType.ROLE_STUDENT)
                             .build();
 
             this.getResultActionsBy(request).andExpect(status().isBadRequest());

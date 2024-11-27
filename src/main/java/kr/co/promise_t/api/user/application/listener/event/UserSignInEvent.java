@@ -1,6 +1,6 @@
 package kr.co.promise_t.api.user.application.listener.event;
 
-import kr.co.promise_t.core.user.UserId;
+import kr.co.promise_t.core.user.vo.UserId;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 

@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.util.Objects;
 import kr.co.promise_t.api.kernel.infrastructure.KeyValueService;
 import kr.co.promise_t.api.user.application.exception.RefreshTokenNotFoundException;
-import kr.co.promise_t.core.user.UserId;
+import kr.co.promise_t.core.user.vo.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

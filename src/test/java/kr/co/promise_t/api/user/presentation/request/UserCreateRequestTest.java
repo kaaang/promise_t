@@ -29,6 +29,6 @@ class UserCreateRequestTest extends ValidatorUnitTestConfig {
                 .password("test")
                 .name("test")
                 .passwordConfirm("test")
-                .roleType(UserRoleType.STUDENT);
+                .roleType(UserRoleType.ROLE_STUDENT);
     }
 }

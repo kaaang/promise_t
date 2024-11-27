@@ -1,7 +1,7 @@
 --liquibase formatted sql
---changeset kaaang:1
+--changeset kaaang:0
 
-CREATE TABLE users
+CREATE TABLE IF NOT EXISTS users
 (
     id         uuid         not null primary key,
     email      varchar(90),

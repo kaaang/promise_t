@@ -6,8 +6,8 @@ import kr.co.promise_t.api.user.application.command.model.CreateUserCommandModel
 import kr.co.promise_t.api.user.application.exception.UserAlreadyExistsException;
 import kr.co.promise_t.core.user.UserData;
 import kr.co.promise_t.core.user.UserFactory;
-import kr.co.promise_t.core.user.UserId;
 import kr.co.promise_t.core.user.UserRepository;
+import kr.co.promise_t.core.user.vo.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
