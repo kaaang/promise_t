@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.List;
 import kr.co.promise_t.core.kernel.domain.BaseEntityAggregateRoot;
+import kr.co.promise_t.core.user.vo.UserId;
 import kr.co.promise_t.core.user.vo.UserRoleType;
 import lombok.*;
 import org.hibernate.annotations.Where;
@@ -20,7 +21,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Table(name = "users")
 @Where(clause = "deleted_at is null")
 public class User extends BaseEntityAggregateRoot<User> implements UserDetails {
-    @EmbeddedId private UserId id;
+    @EmbeddedId
+    @AttributeOverride(name = "value", column = @Column(name = "id"))
+    private UserId id;
 
     @Column @NotNull private String email;
 

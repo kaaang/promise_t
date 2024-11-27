@@ -6,7 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
-import kr.co.promise_t.core.user.UserId;
+import kr.co.promise_t.core.user.vo.UserId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
