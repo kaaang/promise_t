@@ -38,3 +38,7 @@ Redis를 채택하였습니다.
 
 ## 배포 환경
 * 만약 배포 수준의 코드가 완성이 된다면 CodePipeLine, EB 등을 사용해 배포하는것을 목표로 하고 있습니다.
+
+
+## Others
+* 해당 프로젝트는 pre-commit 시에 spotless check를 수행하고 있습니다. 커밋전 ```./gradlew stoplessApply``` 를 수행한 뒤 커밋해야 합니다.
