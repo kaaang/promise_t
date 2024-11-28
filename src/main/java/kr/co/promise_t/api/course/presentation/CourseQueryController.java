@@ -27,6 +27,12 @@ public class CourseQueryController {
 
 
 
+
+
+
+
+
+
         return ResponseEntity.ok(HttpApiResponse.of(output));
     }
 }
