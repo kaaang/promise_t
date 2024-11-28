@@ -6,5 +6,10 @@ import org.springframework.stereotype.Component;
 
 @Component("RoleContainer")
 public class RoleContainer {
+    public static final List<String> ALLOW_ALL_ROLES =
+            List.of(
+                    UserRoleType.ROLE_ADMIN.name(),
+                    UserRoleType.ROLE_TEACHER.name(),
+                    UserRoleType.ROLE_STUDENT.name());
     public static final List<String> ALLOW_TEACHER = List.of(UserRoleType.ROLE_TEACHER.name());
 }

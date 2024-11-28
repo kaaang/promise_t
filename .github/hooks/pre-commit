@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Gradle spotlessCheck 실행
+./gradlew spotlessCheck
+
+if [ $? -ne 0 ]; then
+  echo "❌ './gradlew spotlessApply'가 실행되지 않았습니다."
+  exit 1
+fi
+
+exit 0
