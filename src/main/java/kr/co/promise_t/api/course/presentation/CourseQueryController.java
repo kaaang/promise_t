@@ -24,15 +24,6 @@ public class CourseQueryController {
     public ResponseEntity<Object> getCourse(@PathVariable UUID id) {
         var output = courseQuery.getCourse(CourseId.of(id));
 
-
-
-
-
-
-
-
-
-
         return ResponseEntity.ok(HttpApiResponse.of(output));
     }
 }
