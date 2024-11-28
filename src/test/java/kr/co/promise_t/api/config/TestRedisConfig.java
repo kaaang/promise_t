@@ -39,8 +39,7 @@ public class TestRedisConfig {
         return new LettuceConnectionFactory(host, port);
     }
 
-    @Bean
-    public ObjectMapper objectMapper() {
+    public ObjectMapper redisObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
@@ -50,13 +49,12 @@ public class TestRedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(
-            LettuceConnectionFactory connectionFactory, ObjectMapper objectMapper) {
+    public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory connectionFactory) {
         var template = new RedisTemplate<String, Object>();
         template.setConnectionFactory(connectionFactory);
 
         var stringSerializer = new StringRedisSerializer();
-        var jsonSerializer = new GenericJackson2JsonRedisSerializer(objectMapper);
+        var jsonSerializer = new GenericJackson2JsonRedisSerializer(redisObjectMapper());
 
         template.setKeySerializer(stringSerializer);
         template.setValueSerializer(jsonSerializer);

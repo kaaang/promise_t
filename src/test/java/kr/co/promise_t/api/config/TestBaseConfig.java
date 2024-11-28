@@ -1,6 +1,7 @@
 package kr.co.promise_t.api.config;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -26,6 +27,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 @Disabled
 @AutoConfigureMockMvc(printOnlyOnFailure = false)
@@ -42,11 +45,15 @@ public class TestBaseConfig {
     @Autowired protected MockMvc mockMvc;
     @Autowired protected ObjectMapper objectMapper;
 
+    protected MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+
     protected User teacher;
     protected User student;
 
     @BeforeEach
     void setUp() {
+        params.clear();
+
         this.teacher =
                 new UserFactory(
                                 UserData.builder()
@@ -78,6 +85,18 @@ public class TestBaseConfig {
                                 .contentType(String.valueOf(MediaType.APPLICATION_JSON))
                                 .content(objectMapper.writeValueAsString(request))
                                 .with(user(userDetails)))
+                .andDo(print());
+    }
+
+    protected ResultActions getResultActionsBy(String path, UserDetails userDetails)
+            throws Exception {
+        return mockMvc.perform(get(path).params(params).with(user(userDetails))).andDo(print());
+    }
+
+    protected <T> ResultActions getResultActionsBy(
+            String path, T pathVariable, UserDetails userDetails) throws Exception {
+        return mockMvc
+                .perform(get(path, pathVariable).params(params).with(user(userDetails)))
                 .andDo(print());
     }
 }
