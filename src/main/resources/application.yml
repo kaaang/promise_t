@@ -1,3 +1,8 @@
 spring:
   application:
     name: promise_t
+
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
