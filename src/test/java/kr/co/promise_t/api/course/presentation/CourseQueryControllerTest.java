@@ -1,6 +1,5 @@
 package kr.co.promise_t.api.course.presentation;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.UUID;
@@ -45,6 +44,41 @@ class CourseQueryControllerTest extends TestBaseConfig {
         @Test
         void shouldBeReturnOk() throws Exception {
             getResultActionsBy("/courses/{id}", courseId.getValue(), teacher).andExpect(status().isOk());
+        }
+    }
+
+    @Nested
+    class GetCoursesTest {
+        private final CourseId courseId = CourseId.of(UUID.randomUUID());
+
+        @BeforeEach
+        void setUp() {
+            var course =
+                    new CourseFactory(
+                                    CourseData.builder()
+                                            .courseId(courseId)
+                                            .teacherId(UserId.of(teacher.getId().getValue()))
+                                            .title("test")
+                                            .description("test")
+                                            .build())
+                            .create();
+            courseRepository.save(course);
+        }
+
+        @Test
+        void shouldBeReturnOk() throws Exception {
+            params.add("page", "1");
+            params.add("size", "10");
+
+            getResultActionsBy("/courses", teacher).andExpect(status().isOk());
+        }
+
+        @Test
+        void shouldThrowForbidden_WhenRequestStudent() throws Exception {
+            params.add("page", "1");
+            params.add("size", "10");
+
+            getResultActionsBy("/courses", student).andExpect(status().isForbidden());
         }
     }
 }

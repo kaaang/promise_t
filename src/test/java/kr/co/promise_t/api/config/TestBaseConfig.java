@@ -41,7 +41,7 @@ import org.springframework.util.MultiValueMap;
 @ActiveProfiles(value = "test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Transactional
-public class TestBaseConfig {
+public abstract class TestBaseConfig {
     @Autowired protected MockMvc mockMvc;
     @Autowired protected ObjectMapper objectMapper;
 

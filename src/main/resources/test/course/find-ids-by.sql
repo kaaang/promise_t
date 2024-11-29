@@ -1,0 +1,2 @@
+INSERT INTO public.courses (id, teacher_id, title, description, created_at, updated_at, deleted_at) VALUES ('ac1f2558-e0a9-41e2-b0ae-7b27e8911112', 'fea6edc4-f92b-49d7-84a6-9fa89b68a53a', 'test', 'tttteee', '2024-11-28 00:04:33.624556', '2024-11-28 00:04:33.624556', null);
+INSERT INTO public.courses (id, teacher_id, title, description, created_at, updated_at, deleted_at) VALUES ('0bd4326c-efeb-417a-9a2d-fb376b860573', 'fea6edc4-f92b-49d7-84a6-9fa89b68a53a', 'test', 'tttteee', '2024-11-28 00:05:07.684342', '2024-11-28 00:05:07.684342', null);
