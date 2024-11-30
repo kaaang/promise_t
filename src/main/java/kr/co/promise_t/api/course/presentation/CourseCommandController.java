@@ -3,7 +3,9 @@ package kr.co.promise_t.api.course.presentation;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import kr.co.promise_t.api.course.application.command.CreateCourseCommand;
+import kr.co.promise_t.api.course.application.command.DeleteCourseCommand;
 import kr.co.promise_t.api.course.application.command.model.CreateCourseCommandModel;
+import kr.co.promise_t.api.course.application.command.model.DeleteCourseCommandModel;
 import kr.co.promise_t.api.course.presentation.request.CourseCreateRequest;
 import kr.co.promise_t.api.kernel.command.CommandExecutor;
 import kr.co.promise_t.api.kernel.presentation.http.response.HttpApiResponse;
@@ -16,16 +18,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/courses", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CourseCommandController {
     private final CreateCourseCommand createCourseCommand;
+    private final DeleteCourseCommand deleteCourseCommand;
 
     @PostMapping
     @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_TEACHER)")
@@ -44,5 +44,19 @@ public class CourseCommandController {
                 .invoke();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(HttpApiResponse.of(courseId.getValue()));
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_TEACHER)")
+    public ResponseEntity<Object> delete(@AuthenticationPrincipal User user, @PathVariable UUID id) {
+        new CommandExecutor<>(
+                        deleteCourseCommand,
+                        DeleteCourseCommandModel.builder()
+                                .courseId(CourseId.of(id))
+                                .teacherId(UserId.of(user.getId().getValue()))
+                                .build())
+                .invoke();
+
+        return ResponseEntity.ok().build();
     }
 }
