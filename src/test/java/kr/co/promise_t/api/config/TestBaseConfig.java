@@ -1,12 +1,14 @@
 package kr.co.promise_t.api.config;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Nonnull;
+import java.util.Objects;
 import java.util.UUID;
+import kr.co.promise_t.api.config.payload.ResultActionsPayload;
 import kr.co.promise_t.core.user.User;
 import kr.co.promise_t.core.user.UserData;
 import kr.co.promise_t.core.user.UserFactory;
@@ -21,7 +23,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -48,7 +49,9 @@ public abstract class TestBaseConfig {
     protected MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 
     protected User teacher;
+    protected User otherTeacher;
     protected User student;
+    protected User otherStudent;
 
     @BeforeEach
     void setUp() {
@@ -65,6 +68,17 @@ public abstract class TestBaseConfig {
                                         .build())
                         .create();
 
+        this.otherTeacher =
+                new UserFactory(
+                                UserData.builder()
+                                        .id(UserId.of(UUID.randomUUID()))
+                                        .email("otherteacher@gmail.com")
+                                        .name("otherTeacher")
+                                        .password("test")
+                                        .roleType(UserRoleType.ROLE_TEACHER)
+                                        .build())
+                        .create();
+
         this.student =
                 new UserFactory(
                                 UserData.builder()
@@ -75,28 +89,33 @@ public abstract class TestBaseConfig {
                                         .roleType(UserRoleType.ROLE_STUDENT)
                                         .build())
                         .create();
+
+        this.otherStudent =
+                new UserFactory(
+                                UserData.builder()
+                                        .id(UserId.of(UUID.randomUUID()))
+                                        .email("otherstudent@gmail.com")
+                                        .name("otherStudent")
+                                        .password("test")
+                                        .roleType(UserRoleType.ROLE_STUDENT)
+                                        .build())
+                        .create();
     }
 
-    protected <T> ResultActions getPostResultActionsBy(
-            String path, UserDetails userDetails, T request) throws Exception {
-        return mockMvc
-                .perform(
-                        post(path)
-                                .contentType(String.valueOf(MediaType.APPLICATION_JSON))
-                                .content(objectMapper.writeValueAsString(request))
-                                .with(user(userDetails)))
-                .andDo(print());
-    }
-
-    protected ResultActions getResultActionsBy(String path, UserDetails userDetails)
+    protected <T, V> ResultActions getResultActions(@Nonnull ResultActionsPayload<T, V> payload)
             throws Exception {
-        return mockMvc.perform(get(path).params(params).with(user(userDetails))).andDo(print());
-    }
+        var requestBuilder = payload.getRequestBuilder();
 
-    protected <T> ResultActions getResultActionsBy(
-            String path, T pathVariable, UserDetails userDetails) throws Exception {
-        return mockMvc
-                .perform(get(path, pathVariable).params(params).with(user(userDetails)))
-                .andDo(print());
+        if (Objects.nonNull(payload.getRequest())) {
+            requestBuilder
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .content(objectMapper.writeValueAsString(payload.getRequest()));
+        }
+
+        if (Objects.nonNull(payload.getUserDetails())) {
+            requestBuilder.with(user(payload.getUserDetails()));
+        }
+
+        return mockMvc.perform(requestBuilder).andDo(print());
     }
 }

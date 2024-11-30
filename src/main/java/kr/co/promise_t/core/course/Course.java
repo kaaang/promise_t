@@ -1,7 +1,9 @@
 package kr.co.promise_t.core.course;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import kr.co.promise_t.core.course.vo.CourseId;
 import kr.co.promise_t.core.course.vo.UserId;
 import kr.co.promise_t.core.kernel.domain.BaseEntityAggregateRoot;
@@ -30,4 +32,8 @@ public class Course extends BaseEntityAggregateRoot<Course> {
     @NotNull
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    public void remove(@Nonnull LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
 }

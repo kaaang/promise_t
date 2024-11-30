@@ -4,6 +4,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.UUID;
 import kr.co.promise_t.api.config.TestBaseConfig;
+import kr.co.promise_t.api.config.payload.ResultActionsPayload;
 import kr.co.promise_t.core.course.CourseData;
 import kr.co.promise_t.core.course.CourseFactory;
 import kr.co.promise_t.core.course.CourseRepository;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 
 class CourseQueryControllerTest extends TestBaseConfig {
     @Autowired private CourseRepository courseRepository;
@@ -37,13 +39,26 @@ class CourseQueryControllerTest extends TestBaseConfig {
 
         @Test
         void shouldThrowNotFound_WhenNotExistsCourse() throws Exception {
-            getResultActionsBy("/courses/{id}", UUID.randomUUID(), teacher)
-                    .andExpect(status().isNotFound());
+            var payload =
+                    ResultActionsPayload.builder()
+                            .httpMethod(HttpMethod.GET)
+                            .path("/courses/{id}")
+                            .pathVariable(UUID.randomUUID())
+                            .userDetails(teacher)
+                            .build();
+            getResultActions(payload).andExpect(status().isNotFound());
         }
 
         @Test
         void shouldBeReturnOk() throws Exception {
-            getResultActionsBy("/courses/{id}", courseId.getValue(), teacher).andExpect(status().isOk());
+            var payload =
+                    ResultActionsPayload.builder()
+                            .httpMethod(HttpMethod.GET)
+                            .path("/courses/{id}")
+                            .pathVariable(courseId.getValue())
+                            .userDetails(teacher)
+                            .build();
+            getResultActions(payload).andExpect(status().isOk());
         }
     }
 
@@ -70,7 +85,13 @@ class CourseQueryControllerTest extends TestBaseConfig {
             params.add("page", "1");
             params.add("size", "10");
 
-            getResultActionsBy("/courses", teacher).andExpect(status().isOk());
+            var payload =
+                    ResultActionsPayload.builder()
+                            .httpMethod(HttpMethod.GET)
+                            .path("/courses")
+                            .userDetails(teacher)
+                            .build();
+            getResultActions(payload).andExpect(status().isOk());
         }
 
         @Test
@@ -78,7 +99,13 @@ class CourseQueryControllerTest extends TestBaseConfig {
             params.add("page", "1");
             params.add("size", "10");
 
-            getResultActionsBy("/courses", student).andExpect(status().isForbidden());
+            var payload =
+                    ResultActionsPayload.builder()
+                            .httpMethod(HttpMethod.GET)
+                            .path("/courses")
+                            .userDetails(student)
+                            .build();
+            getResultActions(payload).andExpect(status().isForbidden());
         }
     }
 }
