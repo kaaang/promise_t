@@ -95,4 +95,68 @@ class CourseCommandControllerTest extends TestBaseConfig {
             getResultActions(payload).andExpect(status().isForbidden());
         }
     }
+
+    @Nested
+    class UpdateCourseTest {
+        private final CourseId courseId = CourseId.of(UUID.randomUUID());
+
+        @BeforeEach
+        void setUp() {
+            var course =
+                    new CourseFactory(
+                                    CourseData.builder()
+                                            .courseId(courseId)
+                                            .teacherId(UserId.of(teacher.getId().getValue()))
+                                            .title("test")
+                                            .description("test")
+                                            .build())
+                            .create();
+            courseRepository.save(course);
+        }
+
+        @Test
+        void shouldThrowCourseNotFoundException_WhenRequestRandomId() throws Exception {
+            var request = CourseCreateRequest.builder().title("test1").description("test1").build();
+            var payload =
+                    ResultActionsPayload.builder()
+                            .httpMethod(HttpMethod.PUT)
+                            .path("/courses/{id}")
+                            .pathVariable(UUID.randomUUID())
+                            .request(request)
+                            .userDetails(teacher)
+                            .build();
+
+            getResultActions(payload).andExpect(status().isNotFound());
+        }
+
+        @Test
+        void shouldThrowCourseAccessDeniedException_WhenRequestOtherTeacher() throws Exception {
+            var request = CourseCreateRequest.builder().title("test1").description("test1").build();
+            var payload =
+                    ResultActionsPayload.builder()
+                            .httpMethod(HttpMethod.PUT)
+                            .path("/courses/{id}")
+                            .pathVariable(courseId.getValue())
+                            .request(request)
+                            .userDetails(otherTeacher)
+                            .build();
+
+            getResultActions(payload).andExpect(status().isForbidden());
+        }
+
+        @Test
+        void shouldBeReturnNoContent() throws Exception {
+            var request = CourseCreateRequest.builder().title("test1").description("test1").build();
+            var payload =
+                    ResultActionsPayload.builder()
+                            .httpMethod(HttpMethod.PUT)
+                            .path("/courses/{id}")
+                            .pathVariable(courseId.getValue())
+                            .request(request)
+                            .userDetails(teacher)
+                            .build();
+
+            getResultActions(payload).andExpect(status().isNoContent());
+        }
+    }
 }

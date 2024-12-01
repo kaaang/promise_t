@@ -27,6 +27,8 @@ public class ResultActionsPayload<T, V> {
             requestBuilder = (pathVariable != null) ? put(path, pathVariable) : put(path);
         } else if (httpMethod.equals(HttpMethod.DELETE)) {
             requestBuilder = (pathVariable != null) ? delete(path, pathVariable) : delete(path);
+        } else if (httpMethod.equals(HttpMethod.PATCH)) {
+            requestBuilder = (pathVariable != null) ? patch(path, pathVariable) : patch(path);
         } else {
             throw new IllegalArgumentException("Unsupported HTTP method: " + httpMethod);
         }

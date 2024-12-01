@@ -4,9 +4,12 @@ import jakarta.validation.Valid;
 import java.util.UUID;
 import kr.co.promise_t.api.course.application.command.CreateCourseCommand;
 import kr.co.promise_t.api.course.application.command.DeleteCourseCommand;
+import kr.co.promise_t.api.course.application.command.UpdateCourseCommand;
 import kr.co.promise_t.api.course.application.command.model.CreateCourseCommandModel;
 import kr.co.promise_t.api.course.application.command.model.DeleteCourseCommandModel;
+import kr.co.promise_t.api.course.application.command.model.UpdateCourseCommandModel;
 import kr.co.promise_t.api.course.presentation.request.CourseCreateRequest;
+import kr.co.promise_t.api.course.presentation.request.CourseUpdateRequest;
 import kr.co.promise_t.api.kernel.command.CommandExecutor;
 import kr.co.promise_t.api.kernel.presentation.http.response.HttpApiResponse;
 import kr.co.promise_t.core.course.vo.CourseId;
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 public class CourseCommandController {
     private final CreateCourseCommand createCourseCommand;
     private final DeleteCourseCommand deleteCourseCommand;
+    private final UpdateCourseCommand updateCourseCommand;
 
     @PostMapping
     @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_TEACHER)")
@@ -58,5 +62,24 @@ public class CourseCommandController {
                 .invoke();
 
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_TEACHER)")
+    public ResponseEntity<Object> update(
+            @AuthenticationPrincipal User user,
+            @PathVariable UUID id,
+            @Valid @RequestBody CourseUpdateRequest request) {
+        new CommandExecutor<>(
+                        updateCourseCommand,
+                        UpdateCourseCommandModel.builder()
+                                .courseId(CourseId.of(id))
+                                .teacherId(UserId.of(user.getId().getValue()))
+                                .title(request.getTitle())
+                                .description(request.getDescription())
+                                .build())
+                .invoke();
+
+        return ResponseEntity.noContent().build();
     }
 }
