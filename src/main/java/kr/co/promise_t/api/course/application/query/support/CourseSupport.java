@@ -1,6 +1,7 @@
 package kr.co.promise_t.api.course.application.query.support;
 
 import static kr.co.promise_t.core.course.QCourse.*;
+import static kr.co.promise_t.core.course.QCourseTime.*;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.annotation.Nonnull;
@@ -22,7 +23,7 @@ public class CourseSupport {
                 queryFactory
                         .select(course.id)
                         .from(course)
-                        .where(course.teacherId.eq(field.getTeacherId()))
+                        .where(course.userId.eq(field.getTeacherId()))
                         .orderBy(course.createdAt.desc())
                         .offset(field.getPageable().getOffset())
                         .limit(field.getPageable().getPageSize());
@@ -34,7 +35,7 @@ public class CourseSupport {
                 queryFactory
                         .select(course.count())
                         .from(course)
-                        .where(course.teacherId.eq(field.getTeacherId()));
+                        .where(course.userId.eq(field.getTeacherId()));
         return Optional.ofNullable(query.fetchFirst()).orElse(0L);
     }
 

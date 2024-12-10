@@ -11,7 +11,7 @@ public class CourseFactory implements AbstractDomainFactory<Course> {
     public Course create() {
         return Course.builder()
                 .id(data.getCourseId())
-                .teacherId(data.getTeacherId())
+                .userId(data.getTeacherId())
                 .title(data.getTitle())
                 .description(data.getDescription())
                 .build();

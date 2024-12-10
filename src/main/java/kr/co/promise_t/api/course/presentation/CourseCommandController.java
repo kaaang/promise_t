@@ -3,12 +3,15 @@ package kr.co.promise_t.api.course.presentation;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import kr.co.promise_t.api.course.application.command.CreateCourseCommand;
+import kr.co.promise_t.api.course.application.command.CreateCourseTimeCommand;
 import kr.co.promise_t.api.course.application.command.DeleteCourseCommand;
 import kr.co.promise_t.api.course.application.command.UpdateCourseCommand;
 import kr.co.promise_t.api.course.application.command.model.CreateCourseCommandModel;
+import kr.co.promise_t.api.course.application.command.model.CreateCourseTimeCommandModel;
 import kr.co.promise_t.api.course.application.command.model.DeleteCourseCommandModel;
 import kr.co.promise_t.api.course.application.command.model.UpdateCourseCommandModel;
 import kr.co.promise_t.api.course.presentation.request.CourseCreateRequest;
+import kr.co.promise_t.api.course.presentation.request.CourseTimeCreateRequest;
 import kr.co.promise_t.api.course.presentation.request.CourseUpdateRequest;
 import kr.co.promise_t.api.kernel.command.CommandExecutor;
 import kr.co.promise_t.api.kernel.presentation.http.response.HttpApiResponse;
@@ -30,6 +33,8 @@ public class CourseCommandController {
     private final CreateCourseCommand createCourseCommand;
     private final DeleteCourseCommand deleteCourseCommand;
     private final UpdateCourseCommand updateCourseCommand;
+
+    private final CreateCourseTimeCommand createCourseTimeCommand;
 
     @PostMapping
     @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_TEACHER)")
@@ -81,5 +86,27 @@ public class CourseCommandController {
                 .invoke();
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/times")
+    @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_TEACHER)")
+    public ResponseEntity<Object> createCourseTimes(
+            @AuthenticationPrincipal User user,
+            @PathVariable UUID id,
+            @Valid @RequestBody CourseTimeCreateRequest request) {
+        var courseTimeId = UUID.randomUUID();
+        new CommandExecutor<>(
+                        createCourseTimeCommand,
+                        CreateCourseTimeCommandModel.builder()
+                                .id(courseTimeId)
+                                .courseId(CourseId.of(id))
+                                .teacherId(UserId.of(user.getId().getValue()))
+                                .maxCapacity(request.getMaxCapacity())
+                                .startTime(request.getStartTime())
+                                .endTime(request.getEndTime())
+                                .build())
+                .invoke();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(HttpApiResponse.of(courseTimeId));
     }
 }

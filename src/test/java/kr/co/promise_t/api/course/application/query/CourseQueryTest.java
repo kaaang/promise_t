@@ -1,7 +1,6 @@
 package kr.co.promise_t.api.course.application.query;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 
@@ -27,7 +26,7 @@ class CourseQueryTest extends UnitTestConfig {
         void shouldThrowCourseNotFoundException_WhenCourseIdNotExists() {
             given(courseRepository.findById(any())).willReturn(Optional.empty());
 
-            assertThatThrownBy(() -> courseQuery.getCourse(CourseId.of(UUID.randomUUID())))
+            assertThatThrownBy(() -> courseQuery.getCourseById(CourseId.of(UUID.randomUUID())))
                     .isInstanceOf(CourseNotFoundException.class);
         }
     }

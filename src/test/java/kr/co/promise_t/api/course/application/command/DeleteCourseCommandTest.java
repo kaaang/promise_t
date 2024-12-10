@@ -1,7 +1,6 @@
 package kr.co.promise_t.api.course.application.command;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.util.Optional;
@@ -40,7 +39,7 @@ class DeleteCourseCommandTest extends UnitTestConfig {
         given(model.getTeacherId()).willReturn(requestTeacherId);
         given(model.getCourseId()).willReturn(CourseId.of(UUID.randomUUID()));
         given(courseRepository.findById(any())).willReturn(Optional.of(course));
-        given(course.getTeacherId()).willReturn(otherTeacherId);
+        given(course.getUserId()).willReturn(otherTeacherId);
 
         assertThatThrownBy(() -> command.execute(model))
                 .isInstanceOf(CourseAccessDeniedException.class);
@@ -54,7 +53,7 @@ class DeleteCourseCommandTest extends UnitTestConfig {
         given(model.getTeacherId()).willReturn(teacherId);
         given(model.getCourseId()).willReturn(CourseId.of(UUID.randomUUID()));
         given(courseRepository.findById(any())).willReturn(Optional.of(course));
-        given(course.getTeacherId()).willReturn(teacherId);
+        given(course.getUserId()).willReturn(teacherId);
 
         command.execute(model);
 

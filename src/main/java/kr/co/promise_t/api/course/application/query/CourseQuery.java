@@ -22,7 +22,7 @@ public class CourseQuery {
     private final CourseSupport courseSupport;
 
     @Transactional(readOnly = true)
-    public CourseOutput getCourse(@Nonnull CourseId id) {
+    public CourseOutput getCourseById(@Nonnull CourseId id) {
         var course =
                 courseRepository
                         .findById(id)
@@ -38,7 +38,7 @@ public class CourseQuery {
     }
 
     @Transactional(readOnly = true)
-    public Page<CourseOutputs> getCourses(@Nonnull CoursesField field) {
+    public Page<CourseOutputs> getCoursesBy(@Nonnull CoursesField field) {
         var ids = courseSupport.findIdsBy(field);
         var courses = courseSupport.findByIds(ids);
         var count = courseSupport.countBy(field);

@@ -29,7 +29,7 @@ public class CourseQueryController {
     @GetMapping(value = "/{id}")
     @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_ALL_ROLES)")
     public ResponseEntity<Object> getCourse(@PathVariable UUID id) {
-        var output = courseQuery.getCourse(CourseId.of(id));
+        var output = courseQuery.getCourseById(CourseId.of(id));
 
         return ResponseEntity.ok(HttpApiResponse.of(output));
     }
@@ -39,7 +39,7 @@ public class CourseQueryController {
     public ResponseEntity<Object> getCourses(
             @AuthenticationPrincipal User user, @Nonnull Pageable pageable) {
         var outputs =
-                courseQuery.getCourses(
+                courseQuery.getCoursesBy(
                         CoursesField.builder()
                                 .teacherId(UserId.of(user.getId().getValue()))
                                 .pageable(pageable)
