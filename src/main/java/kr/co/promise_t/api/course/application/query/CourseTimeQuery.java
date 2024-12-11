@@ -2,6 +2,9 @@ package kr.co.promise_t.api.course.application.query;
 
 import jakarta.annotation.Nonnull;
 import java.time.LocalDateTime;
+import java.util.List;
+import kr.co.promise_t.api.course.application.query.field.CourseTimesField;
+import kr.co.promise_t.api.course.application.query.output.CourseTimeOutputs;
 import kr.co.promise_t.api.course.application.query.support.CourseTimeSupport;
 import kr.co.promise_t.core.course.vo.CourseId;
 import lombok.RequiredArgsConstructor;
@@ -19,5 +22,23 @@ public class CourseTimeQuery {
         var count = courseTimeSupport.countsCourseTimeByStartTimeAndEndTime(id, startTime, endTime);
 
         return count <= 0;
+    }
+
+    @Transactional(readOnly = true)
+    public List<CourseTimeOutputs> getCourseTimes(@Nonnull CourseTimesField field) {
+        var courseTimes = courseTimeSupport.findAllBy(field);
+
+        return courseTimes.stream()
+                .map(
+                        time ->
+                                CourseTimeOutputs.builder()
+                                        .id(time.getId())
+                                        .startTime(time.getStartTime())
+                                        .endTime(time.getEndTime())
+                                        .maxCapacity(time.getMaxCapacity())
+                                        .remainingCapacity(time.getRemainingCapacity())
+                                        .reservedCount(time.getReservedCount())
+                                        .build())
+                .toList();
     }
 }

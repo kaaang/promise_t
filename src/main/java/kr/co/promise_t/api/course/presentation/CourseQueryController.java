@@ -3,7 +3,10 @@ package kr.co.promise_t.api.course.presentation;
 import jakarta.annotation.Nonnull;
 import java.util.UUID;
 import kr.co.promise_t.api.course.application.query.CourseQuery;
+import kr.co.promise_t.api.course.application.query.CourseTimeQuery;
+import kr.co.promise_t.api.course.application.query.field.CourseTimesField;
 import kr.co.promise_t.api.course.application.query.field.CoursesField;
+import kr.co.promise_t.api.course.presentation.request.CourseTimesRequest;
 import kr.co.promise_t.api.kernel.page.PageInfo;
 import kr.co.promise_t.api.kernel.presentation.http.response.HttpApiResponse;
 import kr.co.promise_t.core.course.vo.CourseId;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/courses", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CourseQueryController {
     private final CourseQuery courseQuery;
+    private final CourseTimeQuery courseTimeQuery;
 
     @GetMapping(value = "/{id}")
     @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_ALL_ROLES)")
@@ -47,5 +51,19 @@ public class CourseQueryController {
 
         return ResponseEntity.ok(
                 HttpApiResponse.of(outputs.getContent(), new PageInfo(outputs).toMap()));
+    }
+
+    @GetMapping(value = "/{id}/times")
+    @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_ALL_ROLES)")
+    public ResponseEntity<Object> getCourseTimes(@PathVariable UUID id, CourseTimesRequest request) {
+        var outputs =
+                courseTimeQuery.getCourseTimes(
+                        CourseTimesField.builder()
+                                .courseId(CourseId.of(id))
+                                .from(request.getFrom())
+                                .to(request.getTo())
+                                .build());
+
+        return ResponseEntity.ok(HttpApiResponse.of(outputs));
     }
 }

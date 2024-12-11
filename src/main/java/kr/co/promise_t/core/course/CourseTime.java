@@ -38,6 +38,14 @@ public class CourseTime extends BaseEntity {
         return this.reservations.size() > this.maxCapacity;
     }
 
+    public int getReservedCount() {
+        return this.reservations.size();
+    }
+
+    public int getRemainingCapacity() {
+        return this.maxCapacity - this.reservations.size();
+    }
+
     public static CourseTime create(@Nonnull CourseTimeData data) {
         return CourseTime.builder()
                 .id(data.getId())
