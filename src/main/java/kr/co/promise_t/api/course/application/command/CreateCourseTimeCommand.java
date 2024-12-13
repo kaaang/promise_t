@@ -1,5 +1,6 @@
 package kr.co.promise_t.api.course.application.command;
 
+import jakarta.transaction.Transactional;
 import kr.co.promise_t.api.course.application.command.model.CreateCourseTimeCommandModel;
 import kr.co.promise_t.api.course.application.exception.CourseNotFoundException;
 import kr.co.promise_t.api.course.application.exception.DuplicatedCourseTimeException;
@@ -18,6 +19,7 @@ public class CreateCourseTimeCommand implements Command<CreateCourseTimeCommandM
     private final CourseTimeQuery courseTimeQuery;
 
     @Override
+    @Transactional
     public void execute(CreateCourseTimeCommandModel model) {
         var course =
                 courseRepository

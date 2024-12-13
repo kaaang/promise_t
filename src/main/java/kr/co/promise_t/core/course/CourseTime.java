@@ -9,6 +9,7 @@ import java.util.UUID;
 import kr.co.promise_t.core.course.vo.CourseTimeData;
 import kr.co.promise_t.core.kernel.domain.BaseEntity;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -32,6 +33,7 @@ public class CourseTime extends BaseEntity {
 
     @Builder.Default
     @OneToMany(mappedBy = "courseTime", cascade = CascadeType.ALL, orphanRemoval = true)
+    @BatchSize(size = 100)
     private List<CourseTimeReservation> reservations = new ArrayList<>();
 
     public boolean canReserve() {

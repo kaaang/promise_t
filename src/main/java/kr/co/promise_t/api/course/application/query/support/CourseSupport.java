@@ -7,6 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import kr.co.promise_t.api.course.application.query.field.CoursesField;
 import kr.co.promise_t.core.course.Course;
 import kr.co.promise_t.core.course.vo.CourseId;
@@ -45,5 +46,18 @@ public class CourseSupport {
                 .where(course.id.in(ids))
                 .orderBy(course.createdAt.desc())
                 .fetch();
+    }
+
+    public Optional<Course> findByIdAndCourseTimeId(
+            @Nonnull CourseId id, @Nonnull UUID courseTimeId) {
+        return Optional.ofNullable(
+                queryFactory
+                        .selectDistinct(course)
+                        .from(course)
+                        .innerJoin(course.times, courseTime)
+                        .fetchJoin()
+                        .where(course.id.eq(id))
+                        .where(courseTime.id.eq(courseTimeId))
+                        .fetchFirst());
     }
 }

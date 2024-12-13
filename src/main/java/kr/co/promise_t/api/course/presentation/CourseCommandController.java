@@ -2,14 +2,8 @@ package kr.co.promise_t.api.course.presentation;
 
 import jakarta.validation.Valid;
 import java.util.UUID;
-import kr.co.promise_t.api.course.application.command.CreateCourseCommand;
-import kr.co.promise_t.api.course.application.command.CreateCourseTimeCommand;
-import kr.co.promise_t.api.course.application.command.DeleteCourseCommand;
-import kr.co.promise_t.api.course.application.command.UpdateCourseCommand;
-import kr.co.promise_t.api.course.application.command.model.CreateCourseCommandModel;
-import kr.co.promise_t.api.course.application.command.model.CreateCourseTimeCommandModel;
-import kr.co.promise_t.api.course.application.command.model.DeleteCourseCommandModel;
-import kr.co.promise_t.api.course.application.command.model.UpdateCourseCommandModel;
+import kr.co.promise_t.api.course.application.command.*;
+import kr.co.promise_t.api.course.application.command.model.*;
 import kr.co.promise_t.api.course.presentation.request.CourseCreateRequest;
 import kr.co.promise_t.api.course.presentation.request.CourseTimeCreateRequest;
 import kr.co.promise_t.api.course.presentation.request.CourseUpdateRequest;
@@ -35,6 +29,7 @@ public class CourseCommandController {
     private final UpdateCourseCommand updateCourseCommand;
 
     private final CreateCourseTimeCommand createCourseTimeCommand;
+    private final DeleteCourseTimeCommand deleteCourseTimeCommand;
 
     @PostMapping
     @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_TEACHER)")
@@ -108,5 +103,21 @@ public class CourseCommandController {
                 .invoke();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(HttpApiResponse.of(courseTimeId));
+    }
+
+    @DeleteMapping("/{id}/times/{timeId}")
+    @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_TEACHER)")
+    public ResponseEntity<Object> deleteCourseTime(
+            @AuthenticationPrincipal User user, @PathVariable UUID id, @PathVariable UUID timeId) {
+        new CommandExecutor<>(
+                        deleteCourseTimeCommand,
+                        DeleteCourseTimeCommandModel.builder()
+                                .courseId(CourseId.of(id))
+                                .courseTimeId(timeId)
+                                .teacherId(UserId.of(user.getId().getValue()))
+                                .build())
+                .invoke();
+
+        return ResponseEntity.ok().build();
     }
 }

@@ -9,6 +9,7 @@ import kr.co.promise_t.core.course.CourseFactory;
 import kr.co.promise_t.core.course.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +17,7 @@ public class UpdateCourseCommand implements Command<UpdateCourseCommandModel> {
     private final CourseRepository courseRepository;
 
     @Override
+    @Transactional
     public void execute(UpdateCourseCommandModel model) {
         var course =
                 courseRepository
