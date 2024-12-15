@@ -36,10 +36,10 @@ class DeleteCourseCommandTest extends UnitTestConfig {
         var otherTeacherId = UserId.of(UUID.randomUUID());
         var course = mock(Course.class);
 
-        given(model.getTeacherId()).willReturn(requestTeacherId);
+        given(model.getUserId()).willReturn(requestTeacherId);
         given(model.getCourseId()).willReturn(CourseId.of(UUID.randomUUID()));
         given(courseRepository.findById(any())).willReturn(Optional.of(course));
-        given(course.getUserId()).willReturn(otherTeacherId);
+        given(course.getCreatedBy()).willReturn(otherTeacherId);
 
         assertThatThrownBy(() -> command.execute(model))
                 .isInstanceOf(CourseAccessDeniedException.class);
@@ -50,10 +50,10 @@ class DeleteCourseCommandTest extends UnitTestConfig {
         var teacherId = UserId.of(UUID.randomUUID());
         var course = mock(Course.class);
 
-        given(model.getTeacherId()).willReturn(teacherId);
+        given(model.getUserId()).willReturn(teacherId);
         given(model.getCourseId()).willReturn(CourseId.of(UUID.randomUUID()));
         given(courseRepository.findById(any())).willReturn(Optional.of(course));
-        given(course.getUserId()).willReturn(teacherId);
+        given(course.getCreatedBy()).willReturn(teacherId);
 
         command.execute(model);
 

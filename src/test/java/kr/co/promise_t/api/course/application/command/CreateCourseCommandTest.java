@@ -29,7 +29,7 @@ class CreateCourseCommandTest extends UnitTestConfig {
 
     void willReturnModel() {
         given(model.getCourseId()).willReturn(CourseId.of(UUID.randomUUID()));
-        given(model.getTeacherId()).willReturn(UserId.of(UUID.randomUUID()));
+        given(model.getUserId()).willReturn(UserId.of(UUID.randomUUID()));
         given(model.getTitle()).willReturn("test");
         given(model.getDescription()).willReturn("test");
     }

@@ -5,11 +5,13 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-import kr.co.promise_t.core.course.vo.CourseTimeData;
-import kr.co.promise_t.core.kernel.domain.BaseEntity;
+import kr.co.promise_t.core.course.vo.CourseId;
+import kr.co.promise_t.core.course.vo.CourseTimeId;
+import kr.co.promise_t.core.course.vo.UserId;
+import kr.co.promise_t.core.kernel.domain.BaseEntityAggregateRoot;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Where;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -17,24 +19,34 @@ import org.hibernate.annotations.BatchSize;
 @Getter
 @Entity
 @Table(name = "course_bcs_course_times")
-public class CourseTime extends BaseEntity {
-    @Id
-    @GeneratedValue(generator = "uuid2")
-    private UUID id;
+@Where(clause = "deleted_at is null")
+public class CourseTime extends BaseEntityAggregateRoot<CourseTime> {
+    @EmbeddedId
+    @AttributeOverride(name = "value", column = @Column(name = "id"))
+    private CourseTimeId id;
 
-    @ManyToOne
-    @JoinColumn(name = "courses_id")
-    private Course course;
+    @Nonnull
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "course_id"))
+    private CourseId courseId;
 
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
     private int maxCapacity;
 
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "created_by", nullable = false))
+    private UserId createdBy;
+
     @Builder.Default
     @OneToMany(mappedBy = "courseTime", cascade = CascadeType.ALL, orphanRemoval = true)
     @BatchSize(size = 100)
     private List<CourseTimeReservation> reservations = new ArrayList<>();
+
+    public void remove(@Nonnull LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
 
     public boolean canReserve() {
         return this.reservations.size() > this.maxCapacity;
@@ -46,15 +58,5 @@ public class CourseTime extends BaseEntity {
 
     public int getRemainingCapacity() {
         return this.maxCapacity - this.reservations.size();
-    }
-
-    public static CourseTime create(@Nonnull CourseTimeData data) {
-        return CourseTime.builder()
-                .id(data.getId())
-                .course(data.getCourse())
-                .startTime(data.getStartTime())
-                .endTime(data.getEndTime())
-                .maxCapacity(data.getMaxCapacity())
-                .build();
     }
 }

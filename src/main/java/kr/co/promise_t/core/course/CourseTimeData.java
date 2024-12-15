@@ -1,7 +1,6 @@
-package kr.co.promise_t.api.course.application.command.model;
+package kr.co.promise_t.core.course;
 
 import java.time.LocalDateTime;
-import kr.co.promise_t.api.kernel.command.CommandModel;
 import kr.co.promise_t.core.course.vo.CourseId;
 import kr.co.promise_t.core.course.vo.CourseTimeId;
 import kr.co.promise_t.core.course.vo.UserId;
@@ -10,11 +9,11 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class CreateCourseTimeCommandModel implements CommandModel {
+public class CourseTimeData {
     private CourseTimeId id;
     private CourseId courseId;
-    private UserId userId;
-    private int maxCapacity;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private int maxCapacity;
+    private UserId userId;
 }

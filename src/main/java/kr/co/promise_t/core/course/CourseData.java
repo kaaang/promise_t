@@ -9,7 +9,7 @@ import lombok.Getter;
 @Getter
 public class CourseData {
     private CourseId courseId;
-    private UserId teacherId;
+    private UserId createdBy;
     private String title;
     private String description;
 }

@@ -61,7 +61,7 @@ class CourseCommandControllerTest extends TestBaseConfig {
                     new CourseFactory(
                                     CourseData.builder()
                                             .courseId(courseId)
-                                            .teacherId(UserId.of(teacher.getId().getValue()))
+                                            .createdBy(UserId.of(teacher.getId().getValue()))
                                             .title("test")
                                             .description("test")
                                             .build())
@@ -106,7 +106,7 @@ class CourseCommandControllerTest extends TestBaseConfig {
                     new CourseFactory(
                                     CourseData.builder()
                                             .courseId(courseId)
-                                            .teacherId(UserId.of(teacher.getId().getValue()))
+                                            .createdBy(UserId.of(teacher.getId().getValue()))
                                             .title("test")
                                             .description("test")
                                             .build())

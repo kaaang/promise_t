@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 public class CreateCourseCommandModel implements CommandModel {
     private CourseId courseId;
-    private UserId teacherId;
+    private UserId userId;
     private String title;
     private String description;
 }

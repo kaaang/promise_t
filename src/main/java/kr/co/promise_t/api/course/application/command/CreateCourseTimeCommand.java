@@ -6,9 +6,7 @@ import kr.co.promise_t.api.course.application.exception.CourseNotFoundException;
 import kr.co.promise_t.api.course.application.exception.DuplicatedCourseTimeException;
 import kr.co.promise_t.api.course.application.query.CourseTimeQuery;
 import kr.co.promise_t.api.kernel.command.Command;
-import kr.co.promise_t.core.course.CourseRepository;
-import kr.co.promise_t.core.course.CourseTime;
-import kr.co.promise_t.core.course.vo.CourseTimeData;
+import kr.co.promise_t.core.course.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,32 +14,33 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CreateCourseTimeCommand implements Command<CreateCourseTimeCommandModel> {
     private final CourseRepository courseRepository;
+    private final CourseTimeRepository courseTimeRepository;
     private final CourseTimeQuery courseTimeQuery;
 
     @Override
     @Transactional
     public void execute(CreateCourseTimeCommandModel model) {
-        var course =
-                courseRepository
-                        .findByIdAndUserId(model.getCourseId(), model.getTeacherId())
-                        .orElseThrow(() -> new CourseNotFoundException("수업을 찾을 수 없습니다."));
+        if (!courseRepository.existsByIdAndCreatedBy(model.getCourseId(), model.getUserId())) {
+            throw new CourseNotFoundException("수업을 찾을 수 없습니다.");
+        }
 
         if (!courseTimeQuery.canCreateCourseTime(
-                course.getId(), model.getStartTime(), model.getEndTime())) {
+                model.getCourseId(), model.getStartTime(), model.getEndTime())) {
             throw new DuplicatedCourseTimeException("중복된 수업 시간이 존재합니다.");
         }
 
         var courseTime =
-                CourseTime.create(
-                        CourseTimeData.builder()
-                                .id(model.getId())
-                                .startTime(model.getStartTime())
-                                .endTime(model.getEndTime())
-                                .maxCapacity(model.getMaxCapacity())
-                                .course(course)
-                                .build());
-        course.addTimes(courseTime);
+                new CourseTimeFactory(
+                                CourseTimeData.builder()
+                                        .id(model.getId())
+                                        .courseId(model.getCourseId())
+                                        .startTime(model.getStartTime())
+                                        .endTime(model.getEndTime())
+                                        .maxCapacity(model.getMaxCapacity())
+                                        .userId(model.getUserId())
+                                        .build())
+                        .create();
 
-        courseRepository.save(course);
+        courseTimeRepository.save(courseTime);
     }
 }
