@@ -32,7 +32,7 @@ public class CourseTimeQuery {
                 .map(
                         time ->
                                 CourseTimeOutputs.builder()
-                                        .id(time.getId())
+                                        .id(time.getId().getValue())
                                         .startTime(time.getStartTime())
                                         .endTime(time.getEndTime())
                                         .maxCapacity(time.getMaxCapacity())

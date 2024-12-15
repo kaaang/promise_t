@@ -24,7 +24,7 @@ public class CourseTimeSupport {
                 queryFactory
                         .select(courseTime.count())
                         .from(courseTime)
-                        .where(courseTime.course.id.eq(id))
+                        .where(courseTime.courseId.eq(id))
                         .where(courseTime.startTime.lt(endTime).and(courseTime.endTime.gt(startTime)));
 
         return Optional.ofNullable(query.fetchFirst()).orElse(0L);
@@ -36,7 +36,7 @@ public class CourseTimeSupport {
                         .selectFrom(courseTime)
                         .leftJoin(courseTime.reservations)
                         .fetchJoin()
-                        .where(courseTime.course.id.eq(field.getCourseId()))
+                        .where(courseTime.courseId.eq(field.getCourseId()))
                         .where(
                                 courseTime
                                         .startTime

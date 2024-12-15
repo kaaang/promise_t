@@ -10,5 +10,5 @@ import lombok.Getter;
 @Getter
 public class DeleteCourseCommandModel implements CommandModel {
     private CourseId courseId;
-    private UserId teacherId;
+    private UserId userId;
 }

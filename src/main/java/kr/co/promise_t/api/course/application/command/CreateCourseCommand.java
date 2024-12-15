@@ -19,7 +19,7 @@ public class CreateCourseCommand implements Command<CreateCourseCommandModel> {
                 new CourseFactory(
                                 CourseData.builder()
                                         .courseId(model.getCourseId())
-                                        .teacherId(model.getTeacherId())
+                                        .createdBy(model.getUserId())
                                         .title(model.getTitle())
                                         .description(model.getDescription())
                                         .build())

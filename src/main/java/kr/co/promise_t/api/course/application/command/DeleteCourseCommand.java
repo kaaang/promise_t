@@ -23,7 +23,7 @@ public class DeleteCourseCommand implements Command<DeleteCourseCommandModel> {
                         .findById(model.getCourseId())
                         .orElseThrow(() -> new CourseNotFoundException("수업을 찾을 수 없습니다."));
 
-        if (!course.getUserId().equals(model.getTeacherId())) {
+        if (!course.getCreatedBy().equals(model.getUserId())) {
             throw new CourseAccessDeniedException("수업을 삭제할 권한이 없습니다.");
         }
 

@@ -5,7 +5,6 @@ import java.util.UUID;
 import kr.co.promise_t.api.course.application.command.*;
 import kr.co.promise_t.api.course.application.command.model.*;
 import kr.co.promise_t.api.course.presentation.request.CourseCreateRequest;
-import kr.co.promise_t.api.course.presentation.request.CourseTimeCreateRequest;
 import kr.co.promise_t.api.course.presentation.request.CourseUpdateRequest;
 import kr.co.promise_t.api.kernel.command.CommandExecutor;
 import kr.co.promise_t.api.kernel.presentation.http.response.HttpApiResponse;
@@ -28,9 +27,6 @@ public class CourseCommandController {
     private final DeleteCourseCommand deleteCourseCommand;
     private final UpdateCourseCommand updateCourseCommand;
 
-    private final CreateCourseTimeCommand createCourseTimeCommand;
-    private final DeleteCourseTimeCommand deleteCourseTimeCommand;
-
     @PostMapping
     @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_TEACHER)")
     public ResponseEntity<Object> create(
@@ -41,7 +37,7 @@ public class CourseCommandController {
                         createCourseCommand,
                         CreateCourseCommandModel.builder()
                                 .courseId(courseId)
-                                .teacherId(UserId.of(user.getId().getValue()))
+                                .userId(UserId.of(user.getId().getValue()))
                                 .title(request.getTitle())
                                 .description(request.getDescription())
                                 .build())
@@ -57,7 +53,7 @@ public class CourseCommandController {
                         deleteCourseCommand,
                         DeleteCourseCommandModel.builder()
                                 .courseId(CourseId.of(id))
-                                .teacherId(UserId.of(user.getId().getValue()))
+                                .userId(UserId.of(user.getId().getValue()))
                                 .build())
                 .invoke();
 
@@ -74,50 +70,12 @@ public class CourseCommandController {
                         updateCourseCommand,
                         UpdateCourseCommandModel.builder()
                                 .courseId(CourseId.of(id))
-                                .teacherId(UserId.of(user.getId().getValue()))
+                                .userId(UserId.of(user.getId().getValue()))
                                 .title(request.getTitle())
                                 .description(request.getDescription())
                                 .build())
                 .invoke();
 
         return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/{id}/times")
-    @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_TEACHER)")
-    public ResponseEntity<Object> createCourseTimes(
-            @AuthenticationPrincipal User user,
-            @PathVariable UUID id,
-            @Valid @RequestBody CourseTimeCreateRequest request) {
-        var courseTimeId = UUID.randomUUID();
-        new CommandExecutor<>(
-                        createCourseTimeCommand,
-                        CreateCourseTimeCommandModel.builder()
-                                .id(courseTimeId)
-                                .courseId(CourseId.of(id))
-                                .teacherId(UserId.of(user.getId().getValue()))
-                                .maxCapacity(request.getMaxCapacity())
-                                .startTime(request.getStartTime())
-                                .endTime(request.getEndTime())
-                                .build())
-                .invoke();
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(HttpApiResponse.of(courseTimeId));
-    }
-
-    @DeleteMapping("/{id}/times/{timeId}")
-    @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_TEACHER)")
-    public ResponseEntity<Object> deleteCourseTime(
-            @AuthenticationPrincipal User user, @PathVariable UUID id, @PathVariable UUID timeId) {
-        new CommandExecutor<>(
-                        deleteCourseTimeCommand,
-                        DeleteCourseTimeCommandModel.builder()
-                                .courseId(CourseId.of(id))
-                                .courseTimeId(timeId)
-                                .teacherId(UserId.of(user.getId().getValue()))
-                                .build())
-                .invoke();
-
-        return ResponseEntity.ok().build();
     }
 }

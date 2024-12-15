@@ -18,7 +18,7 @@ public class CourseTimeReservation extends BaseEntity {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "course_times_id")
+    @JoinColumn(name = "course_time_id")
     private CourseTime courseTime;
 
     @Embedded

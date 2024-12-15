@@ -24,7 +24,7 @@ public class UpdateCourseCommand implements Command<UpdateCourseCommandModel> {
                         .findById(model.getCourseId())
                         .orElseThrow(() -> new CourseNotFoundException("수업을 찾을 수 없습니다."));
 
-        if (!course.getUserId().equals(model.getTeacherId())) {
+        if (!course.getCreatedBy().equals(model.getUserId())) {
             throw new CourseAccessDeniedException("수업을 수정할 권한이 없습니다.");
         }
 
@@ -32,7 +32,7 @@ public class UpdateCourseCommand implements Command<UpdateCourseCommandModel> {
                 new CourseFactory(
                                 CourseData.builder()
                                         .courseId(model.getCourseId())
-                                        .teacherId(model.getTeacherId())
+                                        .createdBy(model.getUserId())
                                         .title(model.getTitle())
                                         .description(model.getDescription())
                                         .build())

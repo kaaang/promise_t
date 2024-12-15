@@ -23,7 +23,7 @@ class CourseTimeSupportTest extends QueryDslTestConfig {
         private static final CourseId COURSE_ID =
                 CourseId.of(UUID.fromString("e575f1a4-3ddb-4deb-b06b-abb88a2aba39"));
         private static final LocalDateTime MIN_TIME = LocalDateTime.of(2024, 12, 10, 19, 0, 0);
-        private static final LocalDateTime MAX_TIME = LocalDateTime.of(2024, 12, 10, 19, 40, 0);
+        private static final LocalDateTime MAX_TIME = LocalDateTime.of(2024, 12, 10, 20, 30, 0);
 
         @Test
         void shouldBeReturnCourseTimes() {
