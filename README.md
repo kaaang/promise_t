@@ -42,3 +42,11 @@ Redis를 채택하였습니다.
 
 ## Others
 * 해당 프로젝트는 pre-commit 시에 spotless check를 수행하고 있습니다. 커밋전 ```./gradlew stoplessApply``` 를 수행한 뒤 커밋해야 합니다.
+
+
+## UBIQUITOUS LANGUAGE
+| NAME       | Description      |
+|------------|------------------|
+| Course     | 수업이라는 대분류를 지칭한다. |
+| CourseTime | 수업 내에서 일정을 지칭한다. |
+
