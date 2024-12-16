@@ -3,10 +3,14 @@ package kr.co.promise_t.api.course.application.query;
 import jakarta.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.util.List;
+import kr.co.promise_t.api.course.application.exception.CourseTimeNotFoundException;
 import kr.co.promise_t.api.course.application.query.field.CourseTimesField;
+import kr.co.promise_t.api.course.application.query.output.CourseTimeOutput;
 import kr.co.promise_t.api.course.application.query.output.CourseTimeOutputs;
 import kr.co.promise_t.api.course.application.query.support.CourseTimeSupport;
+import kr.co.promise_t.core.course.CourseTimeRepository;
 import kr.co.promise_t.core.course.vo.CourseId;
+import kr.co.promise_t.core.course.vo.CourseTimeId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class CourseTimeQuery {
+    private final CourseTimeRepository courseTimeRepository;
     private final CourseTimeSupport courseTimeSupport;
 
     @Transactional(readOnly = true)
@@ -40,5 +45,22 @@ public class CourseTimeQuery {
                                         .reservedCount(time.getReservedCount())
                                         .build())
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public CourseTimeOutput getCourseTime(@Nonnull CourseTimeId id) {
+        var time =
+                courseTimeRepository
+                        .findById(id)
+                        .orElseThrow(() -> new CourseTimeNotFoundException("수업 일정을 찾을 수 없습니다."));
+
+        return CourseTimeOutput.builder()
+                .id(time.getId().getValue())
+                .startTime(time.getStartTime())
+                .endTime(time.getEndTime())
+                .maxCapacity(time.getMaxCapacity())
+                .remainingCapacity(time.getRemainingCapacity())
+                .reservedCount(time.getReservedCount())
+                .build();
     }
 }

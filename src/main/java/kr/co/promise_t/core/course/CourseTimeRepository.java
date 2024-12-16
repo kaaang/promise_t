@@ -16,7 +16,8 @@ public interface CourseTimeRepository extends JpaRepository<CourseTime, CourseTi
 
     @Modifying
     @Query("DELETE FROM CourseTimeReservation ctr WHERE ctr.courseTime.id = :courseTimeId")
-    void deleteAllCourseTimeReservationByCourseTimeId(@Param("courseTimeId") CourseTimeId id);
+    void deleteAllCourseTimeReservationByCourseTimeId(
+            @Param("courseTimeId") CourseTimeId courseTimeId);
 
     /**
      * 현재 조회량이 많이 않기 때문에 비관적 락을 사용하여서 동시성을 해결 TODO : SQS, Kafka, Redis 중 하나로 동시성을 해결하여 DB의 부하를 줄여야함

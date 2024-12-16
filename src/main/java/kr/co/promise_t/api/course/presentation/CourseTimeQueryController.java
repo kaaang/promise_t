@@ -6,6 +6,7 @@ import kr.co.promise_t.api.course.application.query.field.CourseTimesField;
 import kr.co.promise_t.api.course.presentation.request.CourseTimesRequest;
 import kr.co.promise_t.api.kernel.presentation.http.response.HttpApiResponse;
 import kr.co.promise_t.core.course.vo.CourseId;
+import kr.co.promise_t.core.course.vo.CourseTimeId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,5 +34,13 @@ public class CourseTimeQueryController {
                                 .build());
 
         return ResponseEntity.ok(HttpApiResponse.of(outputs));
+    }
+
+    @GetMapping(value = "/-/times/{id}")
+    @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_ALL_ROLES)")
+    public ResponseEntity<Object> getCourseTime(@PathVariable UUID id) {
+        var output = courseTimeQuery.getCourseTime(CourseTimeId.of(id));
+
+        return ResponseEntity.ok(HttpApiResponse.of(output));
     }
 }
