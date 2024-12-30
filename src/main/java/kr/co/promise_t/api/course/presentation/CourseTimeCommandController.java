@@ -5,6 +5,7 @@ import java.util.UUID;
 import kr.co.promise_t.api.course.application.command.*;
 import kr.co.promise_t.api.course.application.command.model.*;
 import kr.co.promise_t.api.course.presentation.request.CourseTimeCreateRequest;
+import kr.co.promise_t.api.course.presentation.request.CourseTimeUpdateRequest;
 import kr.co.promise_t.api.kernel.command.CommandExecutor;
 import kr.co.promise_t.api.kernel.presentation.http.response.HttpApiResponse;
 import kr.co.promise_t.core.course.vo.CourseId;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/courses", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CourseTimeCommandController {
     private final CreateCourseTimeCommand createCourseTimeCommand;
+    private final UpdateCourseTimeCommand updateCourseTimeCommand;
     private final DeleteCourseTimeCommand deleteCourseTimeCommand;
 
     @PostMapping("/{id}/times")
@@ -58,6 +60,26 @@ public class CourseTimeCommandController {
                         DeleteCourseTimeCommandModel.builder()
                                 .id(CourseTimeId.of(id))
                                 .userId(UserId.of(user.getId().getValue()))
+                                .build())
+                .invoke();
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/-/times/{id}")
+    @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_TEACHER)")
+    public ResponseEntity<Object> updateCourseTime(
+            @AuthenticationPrincipal User user,
+            @PathVariable UUID id,
+            @Valid @RequestBody CourseTimeUpdateRequest request) {
+        new CommandExecutor<>(
+                        updateCourseTimeCommand,
+                        UpdateCourseTimeCommandModel.builder()
+                                .userId(UserId.of(user.getId().getValue()))
+                                .id(CourseTimeId.of(id))
+                                .maxCapacity(request.getMaxCapacity())
+                                .startTime(request.getStartTime())
+                                .endTime(request.getEndTime())
                                 .build())
                 .invoke();
 
