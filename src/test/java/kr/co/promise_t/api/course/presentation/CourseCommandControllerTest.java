@@ -8,6 +8,7 @@ import kr.co.promise_t.api.config.payload.ResultActionsPayload;
 import kr.co.promise_t.api.course.presentation.request.CourseCreateRequest;
 import kr.co.promise_t.core.course.CourseData;
 import kr.co.promise_t.core.course.CourseFactory;
+import kr.co.promise_t.core.course.repository.write.CourseWriteRepository;
 import kr.co.promise_t.core.course.vo.CourseId;
 import kr.co.promise_t.core.course.vo.UserId;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 
 class CourseCommandControllerTest extends TestBaseConfig {
-    @Autowired private CourseRepository courseRepository;
+    @Autowired private CourseWriteRepository courseRepository;
 
     @Nested
     class CreateCourseTest {

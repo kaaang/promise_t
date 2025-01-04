@@ -14,6 +14,7 @@ import kr.co.promise_t.api.course.application.exception.CourseNotFoundException;
 import kr.co.promise_t.api.course.application.exception.DuplicatedCourseTimeException;
 import kr.co.promise_t.api.course.application.query.CourseTimeQuery;
 import kr.co.promise_t.core.course.repository.read.CourseReadRepository;
+import kr.co.promise_t.core.course.repository.write.CourseTimeWriteRepository;
 import kr.co.promise_t.core.course.vo.CourseId;
 import kr.co.promise_t.core.course.vo.CourseTimeId;
 import kr.co.promise_t.core.course.vo.UserId;
@@ -25,7 +26,7 @@ class CreateCourseTimeCommandTest extends UnitTestConfig {
     @InjectMocks private CreateCourseTimeCommand command;
 
     @Mock private CreateCourseTimeCommandModel model;
-    @Mock private CourseTimeRepository courseTimeRepository;
+    @Mock private CourseTimeWriteRepository courseTimeWriteRepository;
     @Mock private CourseTimeQuery courseTimeQuery;
     @Mock private CourseReadRepository courseReadRepository;
 
@@ -59,7 +60,7 @@ class CreateCourseTimeCommandTest extends UnitTestConfig {
 
         command.execute(model);
 
-        then(courseTimeRepository).should(times(1)).save(any());
+        then(courseTimeWriteRepository).should(times(1)).save(any());
     }
 
     void willReturnModel() {
