@@ -1,4 +1,4 @@
-package kr.co.promise_t.config;
+package kr.co.promise_t.core.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

@@ -6,7 +6,7 @@ import kr.co.promise_t.api.user.application.command.model.CreateUserCommandModel
 import kr.co.promise_t.api.user.application.exception.UserAlreadyExistsException;
 import kr.co.promise_t.core.user.UserData;
 import kr.co.promise_t.core.user.UserFactory;
-import kr.co.promise_t.core.user.UserRepository;
+import kr.co.promise_t.core.user.repository.write.UserWriteRepository;
 import kr.co.promise_t.core.user.vo.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class CreateUserCommand implements Command<CreateUserCommandModel> {
-    private final UserRepository userRepository;
+    private final UserWriteRepository userWriteRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -35,11 +35,11 @@ public class CreateUserCommand implements Command<CreateUserCommandModel> {
                                         .build())
                         .create();
 
-        userRepository.save(user);
+        userWriteRepository.save(user);
     }
 
     private void checkIfExists(String email) {
-        if (userRepository.findByEmail(email).isPresent()) {
+        if (userWriteRepository.findByEmail(email).isPresent()) {
             throw new UserAlreadyExistsException("이미 가입된 이메일 입니다.");
         }
     }

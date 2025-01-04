@@ -1,9 +1,10 @@
-package kr.co.promise_t.core.course;
+package kr.co.promise_t.core.course.repository.write;
 
 import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.LockModeType;
 import java.util.Optional;
+import kr.co.promise_t.core.course.CourseTime;
 import kr.co.promise_t.core.course.vo.CourseTimeId;
 import kr.co.promise_t.core.course.vo.UserId;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +12,7 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-public interface CourseTimeRepository extends JpaRepository<CourseTime, CourseTimeId> {
+public interface CourseTimeWriteRepository extends JpaRepository<CourseTime, CourseTimeId> {
     Optional<CourseTime> findByIdAndCreatedBy(@Nonnull CourseTimeId id, @Nonnull UserId userId);
 
     @Modifying

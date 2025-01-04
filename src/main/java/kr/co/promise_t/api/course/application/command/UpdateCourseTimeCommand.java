@@ -8,21 +8,21 @@ import kr.co.promise_t.api.course.application.query.CourseTimeQuery;
 import kr.co.promise_t.api.kernel.command.Command;
 import kr.co.promise_t.core.course.CourseTimeData;
 import kr.co.promise_t.core.course.CourseTimeFactory;
-import kr.co.promise_t.core.course.CourseTimeRepository;
+import kr.co.promise_t.core.course.repository.write.CourseTimeWriteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class UpdateCourseTimeCommand implements Command<UpdateCourseTimeCommandModel> {
-    private final CourseTimeRepository courseTimeRepository;
+    private final CourseTimeWriteRepository courseTimeWriteRepository;
     private final CourseTimeQuery courseTimeQuery;
 
     @Override
     @Transactional
     public void execute(UpdateCourseTimeCommandModel model) {
         var courseTime =
-                courseTimeRepository
+                courseTimeWriteRepository
                         .findById(model.getId())
                         .orElseThrow(() -> new CourseTimeNotFoundException("수업 일정을 찾을 수 없습니다."));
 
@@ -31,7 +31,7 @@ public class UpdateCourseTimeCommand implements Command<UpdateCourseTimeCommandM
             throw new DuplicatedCourseTimeException("중복된 수업 시간이 존재합니다.");
         }
 
-        courseTimeRepository.save(
+        courseTimeWriteRepository.save(
                 new CourseTimeFactory(
                                 CourseTimeData.builder()
                                         .id(courseTime.getId())

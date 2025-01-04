@@ -10,7 +10,7 @@ import kr.co.promise_t.api.course.application.command.model.DeleteCourseCommandM
 import kr.co.promise_t.api.course.application.exception.CourseAccessDeniedException;
 import kr.co.promise_t.api.course.application.exception.CourseNotFoundException;
 import kr.co.promise_t.core.course.Course;
-import kr.co.promise_t.core.course.CourseRepository;
+import kr.co.promise_t.core.course.repository.write.CourseWriteRepository;
 import kr.co.promise_t.core.course.vo.CourseId;
 import kr.co.promise_t.core.course.vo.UserId;
 import org.junit.jupiter.api.Test;
@@ -20,12 +20,12 @@ import org.mockito.Mock;
 class DeleteCourseCommandTest extends UnitTestConfig {
     @InjectMocks private DeleteCourseCommand command;
 
-    @Mock private CourseRepository courseRepository;
+    @Mock private CourseWriteRepository courseWriteRepository;
     @Mock private DeleteCourseCommandModel model;
 
     @Test
     void shouldThrowCourseNotFoundException_WhenCourseNotExists() {
-        given(courseRepository.findById(any())).willReturn(Optional.empty());
+        given(courseWriteRepository.findById(any())).willReturn(Optional.empty());
 
         assertThatThrownBy(() -> command.execute(model)).isInstanceOf(CourseNotFoundException.class);
     }
@@ -38,7 +38,7 @@ class DeleteCourseCommandTest extends UnitTestConfig {
 
         given(model.getUserId()).willReturn(requestTeacherId);
         given(model.getCourseId()).willReturn(CourseId.of(UUID.randomUUID()));
-        given(courseRepository.findById(any())).willReturn(Optional.of(course));
+        given(courseWriteRepository.findById(any())).willReturn(Optional.of(course));
         given(course.getCreatedBy()).willReturn(otherTeacherId);
 
         assertThatThrownBy(() -> command.execute(model))
@@ -52,12 +52,12 @@ class DeleteCourseCommandTest extends UnitTestConfig {
 
         given(model.getUserId()).willReturn(teacherId);
         given(model.getCourseId()).willReturn(CourseId.of(UUID.randomUUID()));
-        given(courseRepository.findById(any())).willReturn(Optional.of(course));
+        given(courseWriteRepository.findById(any())).willReturn(Optional.of(course));
         given(course.getCreatedBy()).willReturn(teacherId);
 
         command.execute(model);
 
         then(course).should(times(1)).remove(any());
-        then(courseRepository).should(times(1)).save(any());
+        then(courseWriteRepository).should(times(1)).save(any());
     }
 }

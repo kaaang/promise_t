@@ -7,7 +7,6 @@ import kr.co.promise_t.api.config.TestBaseConfig;
 import kr.co.promise_t.api.config.payload.ResultActionsPayload;
 import kr.co.promise_t.core.course.CourseData;
 import kr.co.promise_t.core.course.CourseFactory;
-import kr.co.promise_t.core.course.CourseRepository;
 import kr.co.promise_t.core.course.vo.CourseId;
 import kr.co.promise_t.core.course.vo.UserId;
 import org.junit.jupiter.api.BeforeEach;

@@ -14,7 +14,6 @@ public class UserSignInEventListener implements ApplicationListener<UserSignInEv
 
     @Override
     public void onApplicationEvent(@NonNull UserSignInEvent event) {
-        System.out.println("test");
         userCacheService.storeRefreshToken(
                 event.getUserId(), event.getRefreshToken(), event.getDuration());
     }

@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 import kr.co.promise_t.api.config.UnitTestConfig;
 import kr.co.promise_t.api.course.application.exception.CourseNotFoundException;
-import kr.co.promise_t.core.course.CourseRepository;
+import kr.co.promise_t.core.course.repository.read.CourseReadRepository;
 import kr.co.promise_t.core.course.vo.CourseId;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -18,13 +18,13 @@ import org.mockito.Mock;
 class CourseQueryTest extends UnitTestConfig {
     @InjectMocks private CourseQuery courseQuery;
 
-    @Mock private CourseRepository courseRepository;
+    @Mock private CourseReadRepository courseReadRepository;
 
     @Nested
     class GetCourseTest {
         @Test
         void shouldThrowCourseNotFoundException_WhenCourseIdNotExists() {
-            given(courseRepository.findById(any())).willReturn(Optional.empty());
+            given(courseReadRepository.findById(any())).willReturn(Optional.empty());
 
             assertThatThrownBy(() -> courseQuery.getCourseById(CourseId.of(UUID.randomUUID())))
                     .isInstanceOf(CourseNotFoundException.class);

@@ -5,7 +5,7 @@ import kr.co.promise_t.api.course.application.command.model.DeleteCourseCommandM
 import kr.co.promise_t.api.course.application.exception.CourseAccessDeniedException;
 import kr.co.promise_t.api.course.application.exception.CourseNotFoundException;
 import kr.co.promise_t.api.kernel.command.Command;
-import kr.co.promise_t.core.course.CourseRepository;
+import kr.co.promise_t.core.course.repository.write.CourseWriteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,13 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class DeleteCourseCommand implements Command<DeleteCourseCommandModel> {
-    private final CourseRepository courseRepository;
+    private final CourseWriteRepository courseWriteRepository;
 
     @Override
     @Transactional
     public void execute(DeleteCourseCommandModel model) {
         var course =
-                courseRepository
+                courseWriteRepository
                         .findById(model.getCourseId())
                         .orElseThrow(() -> new CourseNotFoundException("수업을 찾을 수 없습니다."));
 
@@ -28,6 +28,6 @@ public class DeleteCourseCommand implements Command<DeleteCourseCommandModel> {
         }
 
         course.remove(LocalDateTime.now());
-        courseRepository.save(course);
+        courseWriteRepository.save(course);
     }
 }

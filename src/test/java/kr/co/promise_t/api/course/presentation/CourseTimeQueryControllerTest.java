@@ -7,6 +7,8 @@ import java.util.UUID;
 import kr.co.promise_t.api.config.TestBaseConfig;
 import kr.co.promise_t.api.config.payload.ResultActionsPayload;
 import kr.co.promise_t.core.course.*;
+import kr.co.promise_t.core.course.repository.write.CourseTimeWriteRepository;
+import kr.co.promise_t.core.course.repository.write.CourseWriteRepository;
 import kr.co.promise_t.core.course.vo.CourseId;
 import kr.co.promise_t.core.course.vo.CourseTimeId;
 import kr.co.promise_t.core.course.vo.UserId;
@@ -17,8 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 
 class CourseTimeQueryControllerTest extends TestBaseConfig {
-    @Autowired private CourseRepository courseRepository;
-    @Autowired private CourseTimeRepository courseTimeRepository;
+    @Autowired private CourseWriteRepository courseRepository;
+    @Autowired private CourseTimeWriteRepository courseTimeRepository;
 
     @Nested
     class GetCourseTimeTest {

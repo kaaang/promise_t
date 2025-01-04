@@ -8,7 +8,7 @@ import kr.co.promise_t.api.course.application.query.field.CourseTimesField;
 import kr.co.promise_t.api.course.application.query.output.CourseTimeOutput;
 import kr.co.promise_t.api.course.application.query.output.CourseTimeOutputs;
 import kr.co.promise_t.api.course.application.query.support.CourseTimeSupport;
-import kr.co.promise_t.core.course.CourseTimeRepository;
+import kr.co.promise_t.core.course.repository.read.CourseTimeReadRepository;
 import kr.co.promise_t.core.course.vo.CourseId;
 import kr.co.promise_t.core.course.vo.CourseTimeId;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class CourseTimeQuery {
-    private final CourseTimeRepository courseTimeRepository;
+    private final CourseTimeReadRepository courseTimeReadRepository;
     private final CourseTimeSupport courseTimeSupport;
 
     @Transactional(readOnly = true)
@@ -50,7 +50,7 @@ public class CourseTimeQuery {
     @Transactional(readOnly = true)
     public CourseTimeOutput getCourseTime(@Nonnull CourseTimeId id) {
         var time =
-                courseTimeRepository
+                courseTimeReadRepository
                         .findById(id)
                         .orElseThrow(() -> new CourseTimeNotFoundException("수업 일정을 찾을 수 없습니다."));
 

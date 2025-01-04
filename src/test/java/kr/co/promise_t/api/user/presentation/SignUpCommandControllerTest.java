@@ -9,7 +9,7 @@ import kr.co.promise_t.api.config.TestBaseConfig;
 import kr.co.promise_t.api.user.presentation.request.UserCreateRequest;
 import kr.co.promise_t.core.user.UserData;
 import kr.co.promise_t.core.user.UserFactory;
-import kr.co.promise_t.core.user.UserRepository;
+import kr.co.promise_t.core.user.repository.read.UserReadRepository;
 import kr.co.promise_t.core.user.vo.UserId;
 import kr.co.promise_t.core.user.vo.UserRoleType;
 import org.junit.jupiter.api.Nested;
@@ -19,7 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 class SignUpCommandControllerTest extends TestBaseConfig {
-    @Autowired private UserRepository userRepository;
+    @Autowired private UserReadRepository userReadRepository;
 
     @Nested
     class CreateUserCommandTest {
@@ -39,7 +39,7 @@ class SignUpCommandControllerTest extends TestBaseConfig {
 
         @Test
         void shouldBeReturn400Error_WhenAlreadyEmail() throws Exception {
-            userRepository.save(
+            userReadRepository.save(
                     new UserFactory(
                                     UserData.builder()
                                             .id(UserId.of(UUID.randomUUID()))

@@ -9,7 +9,7 @@ import kr.co.promise_t.api.user.application.service.payload.CreateTokenPayload;
 import kr.co.promise_t.api.user.application.service.payload.RefreshTokenPayload;
 import kr.co.promise_t.api.user.application.service.payload.UserTokenPayload;
 import kr.co.promise_t.core.user.User;
-import kr.co.promise_t.core.user.UserRepository;
+import kr.co.promise_t.core.user.repository.read.UserReadRepository;
 import kr.co.promise_t.core.user.service.JwtTokenProvider;
 import kr.co.promise_t.core.user.service.UserJwt;
 import kr.co.promise_t.core.user.vo.UserId;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserTokenService {
-    private final UserRepository userRepository;
+    private final UserReadRepository userReadRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final ApplicationEventPublisher eventPublisher;
@@ -35,7 +35,7 @@ public class UserTokenService {
     }
 
     private User getUserOr404ByEmail(String email) {
-        return userRepository
+        return userReadRepository
                 .findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
     }
@@ -61,7 +61,7 @@ public class UserTokenService {
     public UserTokenPayload createTokenBodyBy(RefreshTokenPayload payload) {
         var userId = jwtTokenProvider.getUserId(payload.getRefreshToken());
         var user =
-                userRepository
+                userReadRepository
                         .findById(UserId.of(UUID.fromString(userId)))
                         .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 

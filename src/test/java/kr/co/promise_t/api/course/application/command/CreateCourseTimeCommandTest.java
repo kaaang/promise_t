@@ -13,8 +13,7 @@ import kr.co.promise_t.api.course.application.command.model.CreateCourseTimeComm
 import kr.co.promise_t.api.course.application.exception.CourseNotFoundException;
 import kr.co.promise_t.api.course.application.exception.DuplicatedCourseTimeException;
 import kr.co.promise_t.api.course.application.query.CourseTimeQuery;
-import kr.co.promise_t.core.course.CourseRepository;
-import kr.co.promise_t.core.course.CourseTimeRepository;
+import kr.co.promise_t.core.course.repository.read.CourseReadRepository;
 import kr.co.promise_t.core.course.vo.CourseId;
 import kr.co.promise_t.core.course.vo.CourseTimeId;
 import kr.co.promise_t.core.course.vo.UserId;
@@ -28,13 +27,13 @@ class CreateCourseTimeCommandTest extends UnitTestConfig {
     @Mock private CreateCourseTimeCommandModel model;
     @Mock private CourseTimeRepository courseTimeRepository;
     @Mock private CourseTimeQuery courseTimeQuery;
-    @Mock private CourseRepository courseRepository;
+    @Mock private CourseReadRepository courseReadRepository;
 
     @Test
     void shouldBeThrowCourseNotFoundException_WhenCourseIsNotExits() {
         given(model.getCourseId()).willReturn(CourseId.of(UUID.randomUUID()));
         given(model.getUserId()).willReturn(UserId.of(UUID.randomUUID()));
-        given(courseRepository.existsByIdAndCreatedBy(any(), any())).willReturn(false);
+        given(courseReadRepository.existsByIdAndCreatedBy(any(), any())).willReturn(false);
 
         assertThatThrownBy(() -> command.execute(model)).isInstanceOf(CourseNotFoundException.class);
     }
@@ -45,7 +44,7 @@ class CreateCourseTimeCommandTest extends UnitTestConfig {
         given(model.getUserId()).willReturn(UserId.of(UUID.randomUUID()));
         given(model.getStartTime()).willReturn(LocalDateTime.now());
         given(model.getEndTime()).willReturn(LocalDateTime.now());
-        given(courseRepository.existsByIdAndCreatedBy(any(), any())).willReturn(true);
+        given(courseReadRepository.existsByIdAndCreatedBy(any(), any())).willReturn(true);
         given(courseTimeQuery.canCreateCourseTime(any(), any(), any())).willReturn(false);
 
         assertThatThrownBy(() -> command.execute(model))
@@ -55,7 +54,7 @@ class CreateCourseTimeCommandTest extends UnitTestConfig {
     @Test
     void shouldCallRepositorySave() {
         this.willReturnModel();
-        given(courseRepository.existsByIdAndCreatedBy(any(), any())).willReturn(true);
+        given(courseReadRepository.existsByIdAndCreatedBy(any(), any())).willReturn(true);
         given(courseTimeQuery.canCreateCourseTime(any(), any(), any())).willReturn(true);
 
         command.execute(model);

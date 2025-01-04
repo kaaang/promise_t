@@ -7,20 +7,22 @@ import kr.co.promise_t.api.course.application.exception.DuplicatedCourseTimeExce
 import kr.co.promise_t.api.course.application.query.CourseTimeQuery;
 import kr.co.promise_t.api.kernel.command.Command;
 import kr.co.promise_t.core.course.*;
+import kr.co.promise_t.core.course.repository.read.CourseReadRepository;
+import kr.co.promise_t.core.course.repository.write.CourseTimeWriteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class CreateCourseTimeCommand implements Command<CreateCourseTimeCommandModel> {
-    private final CourseRepository courseRepository;
-    private final CourseTimeRepository courseTimeRepository;
+    private final CourseReadRepository courseReadRepository;
+    private final CourseTimeWriteRepository courseTimeWriteRepository;
     private final CourseTimeQuery courseTimeQuery;
 
     @Override
     @Transactional
     public void execute(CreateCourseTimeCommandModel model) {
-        if (!courseRepository.existsByIdAndCreatedBy(model.getCourseId(), model.getUserId())) {
+        if (!courseReadRepository.existsByIdAndCreatedBy(model.getCourseId(), model.getUserId())) {
             throw new CourseNotFoundException("수업을 찾을 수 없습니다.");
         }
 
@@ -41,6 +43,6 @@ public class CreateCourseTimeCommand implements Command<CreateCourseTimeCommandM
                                         .build())
                         .create();
 
-        courseTimeRepository.save(courseTime);
+        courseTimeWriteRepository.save(courseTime);
     }
 }

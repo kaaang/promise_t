@@ -7,7 +7,7 @@ import kr.co.promise_t.api.course.application.query.field.CoursesField;
 import kr.co.promise_t.api.course.application.query.output.CourseOutput;
 import kr.co.promise_t.api.course.application.query.output.CourseOutputs;
 import kr.co.promise_t.api.course.application.query.support.CourseSupport;
-import kr.co.promise_t.core.course.CourseRepository;
+import kr.co.promise_t.core.course.repository.read.CourseReadRepository;
 import kr.co.promise_t.core.course.vo.CourseId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,13 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class CourseQuery {
-    private final CourseRepository courseRepository;
+    private final CourseReadRepository courseReadRepository;
     private final CourseSupport courseSupport;
 
     @Transactional(readOnly = true)
     public CourseOutput getCourseById(@Nonnull CourseId id) {
         var course =
-                courseRepository
+                courseReadRepository
                         .findById(id)
                         .orElseThrow(() -> new CourseNotFoundException("수업을 찾을 수 없습니다."));
 
