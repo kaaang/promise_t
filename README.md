@@ -3,7 +3,19 @@
 
 해당 프로젝트는 개발 서버까지 배포를 목표로 진행중이며 혼자 진행하는 프로젝트인 만큼 기획을 보완하면서 계속적으로 변경될 예정입니다.
 
-## 기술 스택
+---
+
+
+
+## UBIQUITOUS LANGUAGE
+| NAME       | Description      |
+|------------|------------------|
+| Course     | 수업이라는 대분류를 지칭한다. |
+| CourseTime | 수업 내에서 일정을 지칭한다. |
+
+---
+
+## Stack
  * [JAVA 17]
    * Spring Boot 3.x 버전을 사용을 위한 17버전 채택
    * Sealed Classes 도입으로 인한 상속 제한 JDK 내부 구현을 캡슐화 하여 접근 제한
@@ -16,37 +28,35 @@
    * Spring Framework 6.x 버전과 호환되기 때문에 jakarta 패키지로 변경된것을을 확인하며 개발해볼 예정입니다.
    * 모듈화 관리에 최적화가 되었다 하기 때문에 추후 프로젝트를 모듈로 분리해볼 예정입니다.
 
-## Design
-이 프로젝트의 대부분 코드들은 단일 책임 원칙을 준수할려고 노력하고 있으며 개방 폐쇄 원칙또한 준수하기 위해 커맨드 패턴을 적용하고 있습니다.
->https://refactoring.guru/ko/design-patterns/command
+| Name                 | Port   |
+|:---------------------|:-------|
+| `Spring`             | `8080` |
+| `postgresql-master`  | `5435` |
+| `postgresql-replica` | `5436` |
+| `redis`              | `6379` |
 
+---
+## How To Run
+- Docker 및 Docker Compose가 설치되어 있어야 합니다.
+- Java 17 이상이 설치되어 있어야 합니다.
+- Gradle이 설치되어 있어야 합니다.
+- docker-compose 파일이 mac/linux용으로 경로가 작성되어 있습니다.
 
-## Database
-PostgreSQL을 채택하였습니다.
-채택 이유는 다음과 같습니다.
-- 사용은 해보았지만 mySql과 다른점을 생각하면서 개발해보지 않았기 때문에 1차적으로 채택해보았습니다.
-- 확장성 사용 목표 : 자체에서 제공하는 확장기능인 Full-Text Search 등 기능들을 직접 사용해보고 싶었습니다.
-- SQL 표준 준수 : mySql과 다르게 SQL표준은 엄격하게 준수하기 때문에 채택하였습니다.
+1. docker-compose 실행
+```shell
+docker compose -f ./.promise_t-test/docker-compose.yml up -d
+```
 
-## Cache
-Redis를 채택하였습니다.
-메모리 기반 데이터 저장소로 읽기 및 쓰기가 매우 빠르고 대중적이기 때문에 채택에 큰 영향을 주었습니다.
+2. spring 실행
+```shell
+./gradlew bootRun
+```
 
-## 개발 환경
-* 개발 환경을 실행하기 위해서 docker-compose에 필요한 부분들을 추가해둘 예정입니다.
-  * ```docker-compose -f docker/docker-compose.yml up -d```
-
+---
 ## 배포 환경
 * 만약 배포 수준의 코드가 완성이 된다면 CodePipeLine, EB 등을 사용해 배포하는것을 목표로 하고 있습니다.
 
-
+---
 ## Others
 * 해당 프로젝트는 pre-commit 시에 spotless check를 수행하고 있습니다. 커밋전 ```./gradlew stoplessApply``` 를 수행한 뒤 커밋해야 합니다.
-
-
-## UBIQUITOUS LANGUAGE
-| NAME       | Description      |
-|------------|------------------|
-| Course     | 수업이라는 대분류를 지칭한다. |
-| CourseTime | 수업 내에서 일정을 지칭한다. |
 
