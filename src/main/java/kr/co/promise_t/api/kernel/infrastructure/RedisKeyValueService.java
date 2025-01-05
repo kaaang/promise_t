@@ -29,4 +29,15 @@ public class RedisKeyValueService implements KeyValueService {
     public void delete(String key) {
         redisTemplate.delete(key);
     }
+
+    @Override
+    public boolean exists(String key) {
+        var exists = redisTemplate.hasKey(key);
+        return exists != null && exists;
+    }
+
+    @Override
+    public void expire(String key, Duration duration) {
+        redisTemplate.expire(key, duration);
+    }
 }

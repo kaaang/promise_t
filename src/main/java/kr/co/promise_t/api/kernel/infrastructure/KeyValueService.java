@@ -10,4 +10,8 @@ public interface KeyValueService {
     <E> E get(String key, Class<E> clazz);
 
     void delete(String key);
+
+    boolean exists(String key);
+
+    void expire(String key, Duration duration);
 }

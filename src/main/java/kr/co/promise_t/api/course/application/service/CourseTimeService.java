@@ -20,4 +20,14 @@ public class CourseTimeService {
 
         keyValueService.set(key, 0, duration);
     }
+
+    public void setCourseTimeReservedExpire(CourseTimeId id, LocalDateTime endTime) {
+        var key = String.format(COURSE_TIME_CAPACITY_KEY, id.getValue());
+        if (!keyValueService.exists(key)) {
+            return;
+        }
+
+        var duration = Duration.between(LocalDateTime.now(), endTime);
+        keyValueService.expire(key, duration);
+    }
 }

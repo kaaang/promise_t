@@ -10,6 +10,7 @@ import java.util.Optional;
 import kr.co.promise_t.api.course.application.query.field.CourseTimesField;
 import kr.co.promise_t.core.course.CourseTime;
 import kr.co.promise_t.core.course.vo.CourseId;
+import kr.co.promise_t.core.course.vo.CourseTimeId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -25,6 +26,22 @@ public class CourseTimeSupport {
                         .select(courseTime.count())
                         .from(courseTime)
                         .where(courseTime.courseId.eq(id))
+                        .where(courseTime.startTime.lt(endTime).and(courseTime.endTime.gt(startTime)));
+
+        return Optional.ofNullable(query.fetchFirst()).orElse(0L);
+    }
+
+    public long countsCourseTimeByStartTimeAndEndTimeAndNotId(
+            @Nonnull CourseId id,
+            @Nonnull LocalDateTime startTime,
+            @Nonnull LocalDateTime endTime,
+            @Nonnull CourseTimeId timeId) {
+        var query =
+                queryFactory
+                        .select(courseTime.count())
+                        .from(courseTime)
+                        .where(courseTime.courseId.eq(id))
+                        .where(courseTime.id.ne(timeId))
                         .where(courseTime.startTime.lt(endTime).and(courseTime.endTime.gt(startTime)));
 
         return Optional.ofNullable(query.fetchFirst()).orElse(0L);

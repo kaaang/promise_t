@@ -11,6 +11,7 @@ import kr.co.promise_t.core.course.vo.UserId;
 import kr.co.promise_t.core.kernel.domain.BaseEntityAggregateRoot;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Where;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,6 +20,7 @@ import org.hibernate.annotations.Where;
 @Getter
 @Entity
 @Table(name = "course_bcs_course_times")
+@DynamicUpdate
 @Where(clause = "deleted_at is null")
 public class CourseTime extends BaseEntityAggregateRoot<CourseTime> {
     @EmbeddedId

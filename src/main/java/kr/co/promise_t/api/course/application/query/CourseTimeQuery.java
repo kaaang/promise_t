@@ -30,6 +30,19 @@ public class CourseTimeQuery {
     }
 
     @Transactional(readOnly = true)
+    public boolean canUpdateCourseTime(
+            @Nonnull CourseId id,
+            @Nonnull LocalDateTime startTime,
+            @Nonnull LocalDateTime endTime,
+            @Nonnull CourseTimeId courseTimeId) {
+        var count =
+                courseTimeSupport.countsCourseTimeByStartTimeAndEndTimeAndNotId(
+                        id, startTime, endTime, courseTimeId);
+
+        return count <= 0;
+    }
+
+    @Transactional(readOnly = true)
     public List<CourseTimeOutputs> getCourseTimes(@Nonnull CourseTimesField field) {
         var courseTimes = courseTimeSupport.findAllBy(field);
 
