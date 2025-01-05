@@ -72,9 +72,6 @@ dependencies {
     implementation 'net.javacrumbs.shedlock:shedlock-spring:4.40.0'
     implementation 'net.javacrumbs.shedlock:shedlock-provider-jdbc-template:4.40.0'
 
-//    // Feign
-//    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-
     // Test dependencies
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
