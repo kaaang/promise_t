@@ -28,7 +28,9 @@
 | `Spring`             | `8080` |
 | `postgresql-master`  | `5435` |
 | `postgresql-replica` | `5436` |
-| `redis`              | `6379` |
+| `kafka`              | `9092` |
+| `zookeeper`          | `2181` |
+| `kafka-ui`           | `8081` |
 ---
 ## How To Run
 - Docker 및 Docker Compose가 설치되어 있어야 합니다.
