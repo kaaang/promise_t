@@ -3,11 +3,14 @@ package kr.co.promise_t.api.course.application.query;
 import jakarta.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import kr.co.promise_t.api.course.application.exception.CourseTimeNotFoundException;
 import kr.co.promise_t.api.course.application.query.field.CourseTimesField;
 import kr.co.promise_t.api.course.application.query.output.CourseTimeOutput;
 import kr.co.promise_t.api.course.application.query.output.CourseTimeOutputs;
 import kr.co.promise_t.api.course.application.query.support.CourseTimeSupport;
+import kr.co.promise_t.core.course.CourseTime;
 import kr.co.promise_t.core.course.repository.read.CourseTimeReadRepository;
 import kr.co.promise_t.core.course.vo.CourseId;
 import kr.co.promise_t.core.course.vo.CourseTimeId;
@@ -30,6 +33,19 @@ public class CourseTimeQuery {
     }
 
     @Transactional(readOnly = true)
+    public boolean canUpdateCourseTime(
+            @Nonnull CourseId id,
+            @Nonnull LocalDateTime startTime,
+            @Nonnull LocalDateTime endTime,
+            @Nonnull CourseTimeId courseTimeId) {
+        var count =
+                courseTimeSupport.countsCourseTimeByStartTimeAndEndTimeAndNotId(
+                        id, startTime, endTime, courseTimeId);
+
+        return count <= 0;
+    }
+
+    @Transactional(readOnly = true)
     public List<CourseTimeOutputs> getCourseTimes(@Nonnull CourseTimesField field) {
         var courseTimes = courseTimeSupport.findAllBy(field);
 
@@ -41,8 +57,6 @@ public class CourseTimeQuery {
                                         .startTime(time.getStartTime())
                                         .endTime(time.getEndTime())
                                         .maxCapacity(time.getMaxCapacity())
-                                        .remainingCapacity(time.getRemainingCapacity())
-                                        .reservedCount(time.getReservedCount())
                                         .build())
                 .toList();
     }
@@ -59,8 +73,12 @@ public class CourseTimeQuery {
                 .startTime(time.getStartTime())
                 .endTime(time.getEndTime())
                 .maxCapacity(time.getMaxCapacity())
-                .remainingCapacity(time.getRemainingCapacity())
-                .reservedCount(time.getReservedCount())
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<CourseTime> getCourseTimeWithReservationBy(
+            @Nonnull CourseTimeId id, @Nonnull UUID reservationId) {
+        return Optional.ofNullable(courseTimeSupport.findWithReservationBy(id, reservationId));
     }
 }

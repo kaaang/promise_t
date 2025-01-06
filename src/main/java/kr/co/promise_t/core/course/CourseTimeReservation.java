@@ -24,4 +24,8 @@ public class CourseTimeReservation extends BaseEntity {
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "user_id", nullable = false))
     private UserId userId;
+
+    public static CourseTimeReservation create(UUID id, CourseTime courseTime, UserId userId) {
+        return CourseTimeReservation.builder().id(id).courseTime(courseTime).userId(userId).build();
+    }
 }

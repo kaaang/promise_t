@@ -12,6 +12,4 @@ public class CourseTimeOutput {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private int maxCapacity;
-    private int remainingCapacity;
-    private int reservedCount;
 }

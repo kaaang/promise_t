@@ -5,6 +5,7 @@ import kr.co.promise_t.api.course.application.command.model.CreateCourseTimeComm
 import kr.co.promise_t.api.course.application.exception.CourseNotFoundException;
 import kr.co.promise_t.api.course.application.exception.DuplicatedCourseTimeException;
 import kr.co.promise_t.api.course.application.query.CourseTimeQuery;
+import kr.co.promise_t.api.course.application.service.CourseTimeCacheService;
 import kr.co.promise_t.api.kernel.command.Command;
 import kr.co.promise_t.core.course.*;
 import kr.co.promise_t.core.course.repository.read.CourseReadRepository;
@@ -18,6 +19,7 @@ public class CreateCourseTimeCommand implements Command<CreateCourseTimeCommandM
     private final CourseReadRepository courseReadRepository;
     private final CourseTimeWriteRepository courseTimeWriteRepository;
     private final CourseTimeQuery courseTimeQuery;
+    private final CourseTimeCacheService courseTimeCacheService;
 
     @Override
     @Transactional
@@ -44,5 +46,6 @@ public class CreateCourseTimeCommand implements Command<CreateCourseTimeCommandM
                         .create();
 
         courseTimeWriteRepository.save(courseTime);
+        courseTimeCacheService.storeCourseTimeReservedCount(model.getId(), model.getEndTime());
     }
 }

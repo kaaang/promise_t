@@ -28,6 +28,8 @@ public class CourseTimeCommandController {
     private final UpdateCourseTimeCommand updateCourseTimeCommand;
     private final DeleteCourseTimeCommand deleteCourseTimeCommand;
 
+    private final CreateReservationCommand createReservationCommand;
+
     @PostMapping("/{id}/times")
     @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_TEACHER)")
     public ResponseEntity<Object> createCourseTimes(
@@ -84,5 +86,22 @@ public class CourseTimeCommandController {
                 .invoke();
 
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/-/times/{id}/reservations")
+    @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_STUDENT)")
+    public ResponseEntity<Object> reservations(
+            @AuthenticationPrincipal User user, @PathVariable UUID id) {
+        var reservationId = UUID.randomUUID();
+        new CommandExecutor<>(
+                        createReservationCommand,
+                        CreateReservationCommandModel.builder()
+                                .id(CourseTimeId.of(id))
+                                .userId(UserId.of(user.getId().getValue()))
+                                .reservationId(reservationId)
+                                .build())
+                .invoke();
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

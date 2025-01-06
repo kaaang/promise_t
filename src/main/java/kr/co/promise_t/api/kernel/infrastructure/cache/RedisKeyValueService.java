@@ -1,4 +1,4 @@
-package kr.co.promise_t.api.kernel.infrastructure;
+package kr.co.promise_t.api.kernel.infrastructure.cache;
 
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +28,26 @@ public class RedisKeyValueService implements KeyValueService {
     @Override
     public void delete(String key) {
         redisTemplate.delete(key);
+    }
+
+    @Override
+    public boolean exists(String key) {
+        var exists = redisTemplate.hasKey(key);
+        return exists != null && exists;
+    }
+
+    @Override
+    public void expire(String key, Duration duration) {
+        redisTemplate.expire(key, duration);
+    }
+
+    @Override
+    public Long increase(String key, long increment) {
+        return redisTemplate.opsForValue().increment(key, increment);
+    }
+
+    @Override
+    public Long decrease(String key, long decrement) {
+        return redisTemplate.opsForValue().decrement(key, decrement);
     }
 }
