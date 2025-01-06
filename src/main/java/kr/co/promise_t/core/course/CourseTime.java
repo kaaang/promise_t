@@ -51,14 +51,10 @@ public class CourseTime extends BaseEntityAggregateRoot<CourseTime> {
     }
 
     public boolean canReserve() {
-        return this.reservations.size() > this.maxCapacity;
+        return !this.getStartTime().isBefore(LocalDateTime.now());
     }
 
-    public int getReservedCount() {
-        return this.reservations.size();
-    }
-
-    public int getRemainingCapacity() {
-        return this.maxCapacity - this.reservations.size();
+    public void addReservation(@Nonnull CourseTimeReservation reservation) {
+        this.reservations.add(reservation);
     }
 }

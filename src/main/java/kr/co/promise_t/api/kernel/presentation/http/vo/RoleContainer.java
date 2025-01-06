@@ -12,4 +12,5 @@ public class RoleContainer {
                     UserRoleType.ROLE_TEACHER.name(),
                     UserRoleType.ROLE_STUDENT.name());
     public static final List<String> ALLOW_TEACHER = List.of(UserRoleType.ROLE_TEACHER.name());
+    public static final List<String> ALLOW_STUDENT = List.of(UserRoleType.ROLE_STUDENT.name());
 }

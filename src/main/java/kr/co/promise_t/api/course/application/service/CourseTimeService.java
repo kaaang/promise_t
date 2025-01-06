@@ -1,33 +1,21 @@
 package kr.co.promise_t.api.course.application.service;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import kr.co.promise_t.api.kernel.infrastructure.KeyValueService;
+import jakarta.annotation.Nonnull;
+import kr.co.promise_t.api.course.application.service.vo.ReservationStatus;
+import kr.co.promise_t.core.course.repository.read.CourseTimeReservationReadRepository;
 import kr.co.promise_t.core.course.vo.CourseTimeId;
+import kr.co.promise_t.core.course.vo.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class CourseTimeService {
-    private final KeyValueService keyValueService;
+    private final CourseTimeCacheService courseTimeCacheService;
+    private final CourseTimeReservationReadRepository courseTimeReservationReadRepository;
 
-    private static final String COURSE_TIME_CAPACITY_KEY = "COURSE_TIME_CAPACITY:%s";
-
-    public void storeCourseTimeReservedCount(CourseTimeId id, LocalDateTime endTime) {
-        var key = String.format(COURSE_TIME_CAPACITY_KEY, id.getValue());
-        var duration = Duration.between(LocalDateTime.now(), endTime);
-
-        keyValueService.set(key, 0, duration);
-    }
-
-    public void setCourseTimeReservedExpire(CourseTimeId id, LocalDateTime endTime) {
-        var key = String.format(COURSE_TIME_CAPACITY_KEY, id.getValue());
-        if (!keyValueService.exists(key)) {
-            return;
-        }
-
-        var duration = Duration.between(LocalDateTime.now(), endTime);
-        keyValueService.expire(key, duration);
+    public ReservationStatus getCourserTimeReservationStatus(
+            @Nonnull CourseTimeId id, @Nonnull UserId userId) {
+        return courseTimeCacheService.getCourserTimeReservationStatus(id, userId).orElse(null);
     }
 }

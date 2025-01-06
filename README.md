@@ -264,8 +264,6 @@ docker compose -f ./.promise_t-test/docker-compose.yml up -d
 | `startTime`         | DateTime | true     | 수업 시작 시간    |
 | `endTime`           | DateTime | true     | 수업 종료 시간    |
 | `maxCapacity`       | Integer  | true     | 수강 가능 인원    |
-| `remainingCapacity` | Integer  | true     | 남은 수강 가능 인원 |
-| `reservedCount`     | Integer  | true     | 예약한 수강 인원   |
 
 #### Status
 | Code  | Description     |
@@ -288,8 +286,6 @@ docker compose -f ./.promise_t-test/docker-compose.yml up -d
 | `startTime`         | DateTime | true     | 수업 시작 시간    |
 | `endTime`           | DateTime | true     | 수업 종료 시간    |
 | `maxCapacity`       | Integer  | true     | 수강 가능 인원    |
-| `remainingCapacity` | Integer  | true     | 남은 수강 가능 인원 |
-| `reservedCount`     | Integer  | true     | 예약한 수강 인원   |
 
 #### Status
 | Code  | Description       |
@@ -331,3 +327,39 @@ docker compose -f ./.promise_t-test/docker-compose.yml up -d
 |:------|:------------------|
 | `200` | 수업 일정 삭제 성공       |
 | `404` | 수업 일정을 찾을 수 없는 경우 |
+
+> #### [POST] /courses/-/times/:id/reservations
+수업 일정 예약
+해당 API는 동시성 해결을 위해서 예약 신청시 이벤트를 발행하여서 정원이 모두 차지 않았는지 확인후 상태를 변경하고 있습니다.
+최초 200 반환 후 ```/courses/-/times/:id/reservations/status```를 통하여 예약 완료 상태를 확인해야 합니다.
+
+#### PathVariables
+| Key           | Type | Description |
+|:--------------|:-----|:------------|
+| `id`          | UUID | 수업 일정 아이디   |
+
+#### Status
+| Code  | Description       |
+|:------|:------------------|
+| `200` | 수업 일정 삭제 성공       |
+| `400` | 수업을 예약할 수 없는 경우   |
+| `403` | 학생 권한이 아닌경우       |
+| `404` | 수업 일정을 찾을 수 없는 경우 |
+
+> #### [POST] /courses/-/times/:id/reservations/status
+수업 일정 예약 상태 확인
+
+#### PathVariables
+| Key           | Type | Description |
+|:--------------|:-----|:------------|
+| `id`          | UUID | 수업 일정 아이디   |
+
+##### RequestBody
+| Key      | Type | Required | Description                              |
+|:---------|:-----|:---------|:-----------------------------------------|
+| `status` | Enum | false    | SUCCESS(성공), PENDING(대기중), FAILED(예약 실패) |
+
+#### Status
+| Code  | Description    |
+|:------|:---------------|
+| `200` | 수업 일정 예약 조회 성공 |

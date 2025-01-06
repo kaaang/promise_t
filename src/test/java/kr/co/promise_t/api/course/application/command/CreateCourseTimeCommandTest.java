@@ -13,7 +13,7 @@ import kr.co.promise_t.api.course.application.command.model.CreateCourseTimeComm
 import kr.co.promise_t.api.course.application.exception.CourseNotFoundException;
 import kr.co.promise_t.api.course.application.exception.DuplicatedCourseTimeException;
 import kr.co.promise_t.api.course.application.query.CourseTimeQuery;
-import kr.co.promise_t.api.course.application.service.CourseTimeService;
+import kr.co.promise_t.api.course.application.service.CourseTimeCacheService;
 import kr.co.promise_t.core.course.repository.read.CourseReadRepository;
 import kr.co.promise_t.core.course.repository.write.CourseTimeWriteRepository;
 import kr.co.promise_t.core.course.vo.CourseId;
@@ -30,7 +30,7 @@ class CreateCourseTimeCommandTest extends UnitTestConfig {
     @Mock private CourseTimeWriteRepository courseTimeWriteRepository;
     @Mock private CourseTimeQuery courseTimeQuery;
     @Mock private CourseReadRepository courseReadRepository;
-    @Mock private CourseTimeService courseTimeService;
+    @Mock private CourseTimeCacheService courseTimeCacheService;
 
     @Test
     void shouldBeThrowCourseNotFoundException_WhenCourseIsNotExits() {

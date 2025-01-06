@@ -6,3 +6,9 @@ spring:
     web:
       pageable:
         one-indexed-parameters: true
+
+topic:
+  course-time:
+    reserved:
+      topic: course-time-reserved
+      status-group: course-time-reserved-status-group

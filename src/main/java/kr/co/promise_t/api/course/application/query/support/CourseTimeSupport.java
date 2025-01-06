@@ -1,12 +1,14 @@
 package kr.co.promise_t.api.course.application.query.support;
 
 import static kr.co.promise_t.core.course.QCourseTime.courseTime;
+import static kr.co.promise_t.core.course.QCourseTimeReservation.*;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import kr.co.promise_t.api.course.application.query.field.CourseTimesField;
 import kr.co.promise_t.core.course.CourseTime;
 import kr.co.promise_t.core.course.vo.CourseId;
@@ -61,5 +63,15 @@ public class CourseTimeSupport {
                                         .and(courseTime.endTime.loe(field.getTo())));
 
         return query.fetch();
+    }
+
+    public CourseTime findWithReservationBy(@Nonnull CourseTimeId id, @Nonnull UUID reservationId) {
+        return queryFactory
+                .selectFrom(courseTime)
+                .leftJoin(courseTime.reservations, courseTimeReservation)
+                .fetchJoin()
+                .where(courseTime.id.eq(id))
+                .where(courseTimeReservation.id.eq(reservationId))
+                .fetchOne();
     }
 }

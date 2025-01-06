@@ -2,7 +2,7 @@ package kr.co.promise_t.api.user.application.service;
 
 import java.time.Duration;
 import java.util.Objects;
-import kr.co.promise_t.api.kernel.infrastructure.KeyValueService;
+import kr.co.promise_t.api.kernel.infrastructure.cache.KeyValueService;
 import kr.co.promise_t.api.user.application.exception.RefreshTokenNotFoundException;
 import kr.co.promise_t.core.user.vo.UserId;
 import lombok.RequiredArgsConstructor;
