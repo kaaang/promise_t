@@ -38,19 +38,19 @@ public class CourseTimeCacheService {
         keyValueService.expire(key, duration);
     }
 
-    public long getCourseTimeReservedCount(CourseTimeId id) {
+    public int getCourseTimeReservedCount(CourseTimeId id) {
         var key = String.format(COURSE_TIME_CAPACITY_KEY, id.getValue());
-        return keyValueService.get(key, Long.class);
+        return keyValueService.get(key, Integer.class);
     }
 
     public long incrementCourseTimeReservedCount(CourseTimeId id) {
         var key = String.format(COURSE_TIME_CAPACITY_KEY, id.getValue());
-        return keyValueService.increase(key, 1L);
+        return keyValueService.increase(key, 1);
     }
 
     public void decrementCourseTimeReservedCount(CourseTimeId id) {
         var key = String.format(COURSE_TIME_CAPACITY_KEY, id.getValue());
-        keyValueService.decrease(key, 1L);
+        keyValueService.decrease(key, 1);
     }
 
     public void storeCourseTimeReservationStatus(
