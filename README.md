@@ -14,13 +14,6 @@
 최종적인 목표는 서버 배포 및 클라이언트단 구현까지가 목표입니다.
 
 ---
-
-## API Documents
-```
-https://app.getpostman.com/join-team?invite_code=3cf74fff2b78ea5a01962be091d4aa8883ed91bf56700f006b69600f784fa539
-```
-
----
 ## Stack
  * [JAVA 17]
    * Spring Boot 3.x 버전을 사용을 위한 17버전 채택
