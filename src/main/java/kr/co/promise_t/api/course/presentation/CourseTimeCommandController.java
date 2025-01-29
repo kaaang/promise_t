@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import java.util.UUID;
 import kr.co.promise_t.api.course.application.command.*;
 import kr.co.promise_t.api.course.application.command.model.*;
+import kr.co.promise_t.api.course.presentation.request.CourseTimeCommentCreateRequest;
 import kr.co.promise_t.api.course.presentation.request.CourseTimeCreateRequest;
 import kr.co.promise_t.api.course.presentation.request.CourseTimeUpdateRequest;
 import kr.co.promise_t.api.kernel.command.CommandExecutor;
@@ -29,6 +30,8 @@ public class CourseTimeCommandController {
     private final DeleteCourseTimeCommand deleteCourseTimeCommand;
 
     private final CreateReservationCommand createReservationCommand;
+
+    private final CreateCourseTimeCommentCommand createCourseTimeCommentCommand;
 
     @PostMapping("/{id}/times")
     @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_TEACHER)")
@@ -102,6 +105,25 @@ public class CourseTimeCommandController {
                                 .build())
                 .invoke();
 
+        return ResponseEntity.status(HttpStatus.CREATED).body(HttpApiResponse.of(reservationId));
+    }
+
+    @PostMapping("/-/times/{id}/reservations/{reservationId}/comments")
+    @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_ALL_ROLES)")
+    public ResponseEntity<Object> createComments(
+            @AuthenticationPrincipal User user,
+            @PathVariable UUID id,
+            @PathVariable UUID reservationId,
+            @Valid @RequestBody CourseTimeCommentCreateRequest request) {
+        new CommandExecutor<>(
+                        createCourseTimeCommentCommand,
+                        CreateCourseTimeCommentCommandModel.builder()
+                                .courseTimeId(CourseTimeId.of(id))
+                                .reservationId(reservationId)
+                                .userid(UserId.of(user.getId().getValue()))
+                                .contents(request.getContents())
+                                .build())
+                .invoke();
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

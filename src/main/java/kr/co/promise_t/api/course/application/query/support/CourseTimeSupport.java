@@ -68,7 +68,7 @@ public class CourseTimeSupport {
     public CourseTime findWithReservationBy(@Nonnull CourseTimeId id, @Nonnull UUID reservationId) {
         return queryFactory
                 .selectFrom(courseTime)
-                .leftJoin(courseTime.reservations, courseTimeReservation)
+                .innerJoin(courseTime.reservations, courseTimeReservation)
                 .fetchJoin()
                 .where(courseTime.id.eq(id))
                 .where(courseTimeReservation.id.eq(reservationId))
