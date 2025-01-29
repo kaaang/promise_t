@@ -39,6 +39,7 @@ public class DataSourceWriteConfig {
         properties.put(
                 "hibernate.physical_naming_strategy",
                 "org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy");
+        properties.put("hibernate.hbm2ddl.auto", "update");
 
         return builder
                 .dataSource(dataSource)

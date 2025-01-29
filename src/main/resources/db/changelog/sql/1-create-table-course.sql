@@ -36,3 +36,15 @@ CREATE TABLE IF NOT EXISTS course_bcs_course_time_reservations
     updated_at     TIMESTAMP,
     CONSTRAINT fk_course_time_reservation_course_time FOREIGN KEY (course_time_id) REFERENCES course_bcs_course_times (id) ON DELETE CASCADE
     );
+
+CREATE TABLE IF NOT EXISTS course_bcs_course_time_comments
+(
+    id             uuid NOT NULL
+        PRIMARY KEY,
+    created_at     TIMESTAMP,
+    updated_at     TIMESTAMP,
+    created_by     uuid NOT NULL,
+    course_time_id uuid
+        CONSTRAINT fk_course_time_comment_course_time
+            REFERENCES course_bcs_course_times
+);

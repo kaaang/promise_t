@@ -4,6 +4,7 @@ import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.LockModeType;
 import java.util.Optional;
+import java.util.UUID;
 import kr.co.promise_t.core.course.CourseTime;
 import kr.co.promise_t.core.course.vo.CourseTimeId;
 import kr.co.promise_t.core.course.vo.UserId;
@@ -26,4 +27,9 @@ public interface CourseTimeWriteRepository extends JpaRepository<CourseTime, Cou
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select ct from CourseTime ct where ct.id=:id")
     Optional<CourseTime> findByIdWithLock(@Param("id") CourseTimeId id);
+
+    @Query(
+            "select ct from CourseTime ct inner join fetch ct.reservations ctr where ct.id = :id and ctr.id = :reservationId")
+    Optional<CourseTime> findWithReservationByIdAndReservationId(
+            @Param("id") CourseTimeId id, @Param("reservationId") UUID reservationId);
 }
