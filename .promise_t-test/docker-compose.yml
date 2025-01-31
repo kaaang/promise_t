@@ -80,6 +80,20 @@ services:
       KAFKA_CLUSTERS_0_READONLY: "false"
     restart: always
 
+  storage:
+    container_name: s3
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ACCESS_KEY: promise-t
+      MINIO_SECRET_KEY: promise-t-secret
+      MINIO_ROOT_USER: test
+      MINIO_ROOT_PASSWORD: test-secret
+    command: ["server", "/data", "--console-address", ":9001"]
+
+
 volumes:
   postgres-data:
     driver: local
