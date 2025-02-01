@@ -20,10 +20,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/courses", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/courses")
 public class CourseTimeCommandController {
     private final CreateCourseTimeCommand createCourseTimeCommand;
     private final UpdateCourseTimeCommand updateCourseTimeCommand;
@@ -108,13 +109,17 @@ public class CourseTimeCommandController {
         return ResponseEntity.status(HttpStatus.CREATED).body(HttpApiResponse.of(reservationId));
     }
 
-    @PostMapping("/-/times/{id}/reservations/{reservationId}/comments")
+    @PostMapping(
+            value = "/-/times/{id}/reservations/{reservationId}/comments",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_ALL_ROLES)")
     public ResponseEntity<Object> createComments(
             @AuthenticationPrincipal User user,
             @PathVariable UUID id,
             @PathVariable UUID reservationId,
-            @Valid @RequestBody CourseTimeCommentCreateRequest request) {
+            @RequestPart CourseTimeCommentCreateRequest request,
+            @RequestPart(required = false) MultipartFile file) {
+
         new CommandExecutor<>(
                         createCourseTimeCommentCommand,
                         CreateCourseTimeCommentCommandModel.builder()
@@ -122,6 +127,7 @@ public class CourseTimeCommandController {
                                 .reservationId(reservationId)
                                 .userid(UserId.of(user.getId().getValue()))
                                 .contents(request.getContents())
+                                .file(file)
                                 .build())
                 .invoke();
         return ResponseEntity.status(HttpStatus.CREATED).build();

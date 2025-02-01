@@ -7,6 +7,7 @@ import kr.co.promise_t.core.course.vo.CourseTimeId;
 import kr.co.promise_t.core.course.vo.UserId;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Builder
 @Getter
@@ -15,4 +16,5 @@ public class CreateCourseTimeCommentCommandModel implements CommandModel {
     @Nonnull private UUID reservationId;
     @Nonnull private UserId userid;
     @Nonnull private String contents;
+    private MultipartFile file;
 }
