@@ -28,6 +28,7 @@ public class S3LocalStorageConfig {
         return S3Client.builder()
                 .region(Region.of(region))
                 .endpointOverride(URI.create("http://localhost:9000"))
+                .forcePathStyle(true)
                 .credentialsProvider(
                         StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKey, secretKey)))
                 .build();
