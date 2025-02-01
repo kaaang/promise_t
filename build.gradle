@@ -72,6 +72,9 @@ dependencies {
     implementation 'net.javacrumbs.shedlock:shedlock-spring:4.40.0'
     implementation 'net.javacrumbs.shedlock:shedlock-provider-jdbc-template:4.40.0'
 
+    // AWS
+    implementation 'software.amazon.awssdk:s3:2.20.66'
+
     // Test dependencies
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
