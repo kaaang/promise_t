@@ -8,6 +8,7 @@ import java.time.Duration;
 import kr.co.promise_t.api.kernel.exception.StorageFileNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -18,9 +19,10 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 
+@Profile("local")
 @Service
 @RequiredArgsConstructor
-public class S3SyncStorage implements Storage {
+public class S3LocalSyncStorage implements Storage {
     private static final Duration SIGNATURE_DURATION = Duration.ofSeconds(60 * 5);
 
     private final S3Client s3Client;

@@ -61,4 +61,13 @@ public class CourseTimeQueryController {
         return ResponseEntity.ok(
                 HttpApiResponse.of(CourseTimeReservationStatusResponse.builder().status(status).build()));
     }
+
+    @GetMapping(value = "/-/times/-/reservations/{reservationId}/comments")
+    @PreAuthorize("hasAnyRole(@RoleContainer.ALLOW_ALL_ROLES)")
+    public ResponseEntity<Object> getComments(
+            @AuthenticationPrincipal User user, @PathVariable UUID reservationId) {
+        var commentOutputs = courseTimeService.getCommentsByReservationId(reservationId);
+
+        return ResponseEntity.ok(HttpApiResponse.of(commentOutputs));
+    }
 }
