@@ -92,6 +92,7 @@ services:
       MINIO_ROOT_USER: test
       MINIO_ROOT_PASSWORD: test-secret
     command: ["server", "/data", "--console-address", ":9001"]
+    restart: always
 
 
 volumes:

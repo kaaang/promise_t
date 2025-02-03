@@ -1,6 +1,7 @@
 package kr.co.promise_t.api.course.presentation;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 import kr.co.promise_t.api.course.application.command.*;
 import kr.co.promise_t.api.course.application.command.model.*;
@@ -118,7 +119,7 @@ public class CourseTimeCommandController {
             @PathVariable UUID id,
             @PathVariable UUID reservationId,
             @RequestPart CourseTimeCommentCreateRequest request,
-            @RequestPart(required = false) MultipartFile file) {
+            @RequestPart(required = false) List<MultipartFile> files) {
 
         new CommandExecutor<>(
                         createCourseTimeCommentCommand,
@@ -127,7 +128,7 @@ public class CourseTimeCommandController {
                                 .reservationId(reservationId)
                                 .userid(UserId.of(user.getId().getValue()))
                                 .contents(request.getContents())
-                                .file(file)
+                                .files(files)
                                 .build())
                 .invoke();
         return ResponseEntity.status(HttpStatus.CREATED).build();

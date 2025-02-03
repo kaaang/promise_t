@@ -1,5 +1,6 @@
 package kr.co.promise_t.api.course.application.command;
 
+import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.util.Objects;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Slf4j
@@ -46,27 +48,38 @@ public class CreateCourseTimeCommentCommand
         reservation.addComment(comment);
 
         // TODO : 추후 커멘드로 분리
-        if (Objects.nonNull(model.getFile())) {
-            var id = UUID.randomUUID();
-            var path =
-                    String.format(
-                            "%s/%s.%s",
-                            reservation.getId(),
-                            id,
-                            FilenameUtils.getExtension(
-                                    Objects.requireNonNull(model.getFile().getOriginalFilename()).toLowerCase()));
+        model
+                .getFiles()
+                .forEach(
+                        file -> {
+                            var attachmentId = UUID.randomUUID();
+                            var path =
+                                    this.createPtah(
+                                            attachmentId,
+                                            reservation.getId(),
+                                            Objects.requireNonNull(file.getOriginalFilename()));
+                            this.uploadFile(file, path);
 
-            try {
-                storage.upload(path, model.getFile().getInputStream());
-            } catch (IOException e) {
-                log.error("=== Failed to upload image === ", e);
-                throw new FailAttachmentUploadException("파일 업로드 실패");
-            }
-
-            var attachment = CourseTimeReservationAttachment.create(id, path, comment);
-            comment.addAttachment(attachment);
-        }
+                            var attachment = CourseTimeReservationAttachment.create(attachmentId, path, comment);
+                            comment.addAttachment(attachment);
+                        });
 
         courseTimeWriteRepository.save(courseTime);
+    }
+
+    private void uploadFile(@Nonnull MultipartFile file, @Nonnull String path) {
+        try {
+            storage.upload(path, file.getInputStream());
+        } catch (IOException e) {
+            log.error("=== Failed to upload image === ", e);
+            throw new FailAttachmentUploadException("파일 업로드 실패");
+        }
+    }
+
+    private String createPtah(
+            @Nonnull UUID attachmentId, @Nonnull UUID reservationId, @Nonnull String filename) {
+        return String.format(
+                "%s/%s.%s",
+                reservationId, attachmentId, FilenameUtils.getExtension(filename).toLowerCase());
     }
 }
