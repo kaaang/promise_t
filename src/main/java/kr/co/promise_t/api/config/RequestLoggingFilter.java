@@ -47,6 +47,14 @@ public class RequestLoggingFilter implements Filter {
                 logData.put("queryParams", formattedParams);
             }
 
+            if (isMultipartRequest(httpRequest)) {
+                logger.info(
+                        "Request Log:\n{}",
+                        objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(logData));
+                chain.doFilter(httpRequest, response);
+                return;
+            }
+
             // Request Body
             var wrappedRequest = new CachedBodyHttpServletRequest(httpRequest);
             var requestBody = wrappedRequest.getBody();
@@ -62,5 +70,9 @@ public class RequestLoggingFilter implements Filter {
         } else {
             chain.doFilter(request, response);
         }
+    }
+
+    private boolean isMultipartRequest(HttpServletRequest request) {
+        return request.getContentType() != null && request.getContentType().startsWith("multipart/");
     }
 }

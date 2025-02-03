@@ -11,6 +11,7 @@ import kr.co.promise_t.api.course.application.query.output.CourseTimeOutput;
 import kr.co.promise_t.api.course.application.query.output.CourseTimeOutputs;
 import kr.co.promise_t.api.course.application.query.support.CourseTimeSupport;
 import kr.co.promise_t.core.course.CourseTime;
+import kr.co.promise_t.core.course.CourseTimeReservation;
 import kr.co.promise_t.core.course.repository.read.CourseTimeReadRepository;
 import kr.co.promise_t.core.course.vo.CourseId;
 import kr.co.promise_t.core.course.vo.CourseTimeId;
@@ -80,5 +81,10 @@ public class CourseTimeQuery {
     public Optional<CourseTime> getCourseTimeWithReservationBy(
             @Nonnull CourseTimeId id, @Nonnull UUID reservationId) {
         return Optional.ofNullable(courseTimeSupport.findWithReservationBy(id, reservationId));
+    }
+
+    @Transactional(readOnly = true)
+    public CourseTimeReservation getReservationWithComments(@Nonnull UUID reservationId) {
+        return courseTimeSupport.findReservationWithCommentsBy(reservationId);
     }
 }

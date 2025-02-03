@@ -41,6 +41,10 @@ public class S3LocalStorageConfig {
                 .endpointOverride(URI.create("http://localhost:9000"))
                 .credentialsProvider(
                         StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKey, secretKey)))
+                .serviceConfiguration(
+                        software.amazon.awssdk.services.s3.S3Configuration.builder()
+                                .pathStyleAccessEnabled(true)
+                                .build())
                 .build();
     }
 }

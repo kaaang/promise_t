@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 import kr.co.promise_t.api.course.application.query.field.CourseTimesField;
 import kr.co.promise_t.core.course.CourseTime;
+import kr.co.promise_t.core.course.CourseTimeReservation;
 import kr.co.promise_t.core.course.vo.CourseId;
 import kr.co.promise_t.core.course.vo.CourseTimeId;
 import lombok.RequiredArgsConstructor;
@@ -71,6 +72,15 @@ public class CourseTimeSupport {
                 .innerJoin(courseTime.reservations, courseTimeReservation)
                 .fetchJoin()
                 .where(courseTime.id.eq(id))
+                .where(courseTimeReservation.id.eq(reservationId))
+                .fetchOne();
+    }
+
+    public CourseTimeReservation findReservationWithCommentsBy(@Nonnull UUID reservationId) {
+        return queryFactory
+                .selectFrom(courseTimeReservation)
+                .leftJoin(courseTimeReservation.comments)
+                .fetchJoin()
                 .where(courseTimeReservation.id.eq(reservationId))
                 .fetchOne();
     }
